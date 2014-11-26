@@ -9,7 +9,7 @@ package com.daoman.task.config;
  */
 public class AppConst {
 
-	public final static String SESSION_KEY = "pceventsession";
+	public final static String SESSION_KEY = "sessionuserkey";
 	
 	/**
 	 * 默认日期格式：yyyy-MM-dd HH:mm:ss

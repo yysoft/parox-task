@@ -6,5 +6,4 @@
 	{{/each}}
 	<li><a href="#"  page-start="{{next}}">&raquo;</a></li>
 </ul>
-
 </script>

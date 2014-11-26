@@ -32,10 +32,13 @@ require.config({
 		"messenger":"plugin/messenger/build/js/messenger.min",
 		
 		//项目模块
-		"util/dt":"js/erp/config/util.dt",
-		"util/form":"js/erp/config/util.form",
-		"util/table":"js/erp/config/util.table",
-		"util/cache":"js/erp/config/util.cache",
+//		"util/dt":"js/erp/config/util.dt",
+//		"util/form":"js/erp/config/util.form",
+		"utils/cache":"js/utils/util.cache",
+		"utils/table":"js/utils/util.table",
+		"utils/table/pager":"js/utils/util.table.pager",
+		
+		"job/definition":"js/app/definition",
 //		"product/prop":"js/erp/config/product.prop",
 //		"product/define":"js/erp/config/product.define",
 		

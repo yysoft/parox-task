@@ -1,0 +1,64 @@
+<div class="container-fluid mt8">
+	<div class="row">
+		<div class="table-responsive" id="definition_list">
+			#springMessage("tip.loading")
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	require([	  "jquery","template","messenger", "job/definition", "utils/table"],
+		function(jQuery,  template,   messenger,    definition,            table){
+		
+			definition.table.init({
+				tpl:{
+					"table":"tpl_definition_list"
+				},
+				renderTo:"definition_list",
+				url:"#springUrl('/definition/page.do')",
+				pager:{
+					start:0,
+					limit:20
+				}
+			});
+			
+			definition.table.search();
+			
+		}
+	);
+</script>
+
+<script id="tpl_definition_list" type="text/html">
+	<table class="table table-hover table-bordered">
+		<thead>
+		<tr class="active">
+			<th class="text-center" width="10">#</th>
+			<th class="text-center" width="80">#springMessage('tb.definition.name')</th>
+			<th class="text-center" width="80">#springMessage('tb.definition.cron')</th>
+			<th class="text-center" >#springMessage('tb.definition.classpath')</th>
+			<th class="text-center">#springMessage('tb.definition.classname')</th>
+			<th class="text-center" width="80">#springMessage('tb.definition.single.running')</th>
+            <th class="text-center" width="10"></th>
+		</tr>
+		</thead>
+		<tbody>
+		{{each records as dto i}}
+		<tr >
+			<td >{{i + 1}}</td>
+			<td >{{dto.definition.jobName}}</td>
+			<td >{{dto.definition.cron}}</td>
+			<td >{{dto.definition.jobClasspath}}</td>
+			<td >{{dto.definition.jobClassName}}</td>
+			<td >{{dto.running}}</td>
+			<td >
+			<button type="button" class="btn btn-danger btn-xs act-delete" model-definition-id="{{dto.definition.id}}">
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+			</td>
+		</tr>
+		{{/each}}
+		</tbody>
+	</table>
+</script>
+
+#parse("/tpl/util/table.pager.bar.vm")

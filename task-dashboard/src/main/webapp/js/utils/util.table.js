@@ -1,0 +1,105 @@
+/**
+ * Product 模块相关的操作
+ * */
+define(		["jquery","template","utils/table/pager"],
+	function( jQuery,  template,   pg){
+	
+		var table={};
+
+		table["init"] = function(config){
+			config = config||{};
+			this.config=config;
+			if(this.config.pager==null){
+				this.config.pager={};
+			}
+		};
+		
+		table["search"] = function(searchCond){
+			
+			searchCond=searchCond||{};
+			
+			this.searchCond=searchCond;
+			
+			jQuery.post(this.config.url, this.buildSubmit(searchCond), this.buildHtml, "json");
+			
+		};
+		
+		table["buildSubmit"]=function(searchCond){
+			var pager = this.config.pager;
+			if(typeof searchCond == "string"){
+				jQuery.each(pager,function(k, v){
+					searchCond = searchCond+"&"+k+"="+encodeURIComponent(v);
+				});
+				return searchCond;
+			}
+			
+			jQuery.each(pager,function(k, v){
+				searchCond[k]=encodeURIComponent(v);
+			});
+			
+			return searchCond;
+		};
+		
+		table["buildHtml"]=function(p){
+			
+			p = table.preBuildTable(p);
+//			p= table.preBuildTable(p);
+			
+			var tableHtml = template(table.config.tpl.table, p);
+			var pagerBar = pg.pageBar(p);
+			
+			jQuery("#"+table.config.renderTo).empty();
+			
+			jQuery("#"+table.config.renderTo).html(tableHtml);
+			jQuery("#"+table.config.renderTo).append(pagerBar);
+			
+			//绑定分页导航事件
+			pg.doPage(table.config.renderTo, function(item){
+				var start = item.attr("page-start");
+				start = start||0;
+				table.setStart(start);
+				table.search(table.searchCond);
+			});
+			
+			table.afterBuildTable();
+		};
+		
+		//需要按照实情情况重新实现
+		table["preBuildTable"] = function(p){
+			// pre build html
+			return p;
+		};
+		
+		table["afterBuildTable"] = function(){
+			
+//			jQuery("#"+table.config.renderTo+" .act-delete").click(function(){
+//				var pid= jQuery(this).attr("model-product-id");
+//				
+//				table.remove(pid, jQuery(this));
+//				
+//			});
+			
+		};
+		
+		table["setOrder"]=function(sort, desc){
+			var pager = this.config.pager||{};
+			pager["sort"]=sort;
+			pager["desc"]=desc;
+			this.config.pager = pager;
+		};
+		
+		table["setStart"]=function(start){
+			var pager = this.config.pager||{};
+			pager["start"]=start;
+			this.config.pager = pager;
+		};
+		
+		table["setLimit"]=function(limit){
+			var pager = this.config.pager||{};
+			pager["limit"]=limit;
+			this.config.pager = pager;
+		};
+		
+		return table;
+	}
+);

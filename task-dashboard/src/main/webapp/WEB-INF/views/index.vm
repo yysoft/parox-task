@@ -1,12 +1,10 @@
 #globalHeader("index")
 
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-			
+			<h2>任务调度系统</h2>
 		</div>
-		
 	</div>
 </div>
 

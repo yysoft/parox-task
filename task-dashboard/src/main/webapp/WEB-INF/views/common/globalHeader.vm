@@ -11,21 +11,21 @@
           <a class="navbar-brand" href="#springUrl('')">#springMessage("global.sitename")</a>
         </div>
         <div class="navbar-collapse collapse">
-		  <ul class="nav navbar-nav">
-            <li #if(${menuIdx} == "index")class="active"#end>
+		<ul class="nav navbar-nav">
+			<li #if(${menuIdx} == "index")class="active"#end>
 				<a href="#springUrl('/')">#springMessage("m.index")</a>
 			</li>
 			
-			<li #if(${menuIdx} == "task")class="active"#end>
-				<a href="#springUrl('/task/index.do')">#springMessage("m.task.all")</a>
+			<li #if(${menuIdx} == "definition")class="active"#end>
+				<a href="#springUrl('/definition/index.do')">#springMessage("m.task.all")</a>
 			</li>
 			
 			<li #if(${menuIdx} == "log")class="active"#end>
 				<a href="#springUrl('/status/index.do')">#springMessage("m.task.log")</a>
 			</li>
 			
-          </ul>
+		</ul>
 
-        </div><!--/.nav-collapse -->
+		</div><!--/.nav-collapse -->
       </div>
     </div>

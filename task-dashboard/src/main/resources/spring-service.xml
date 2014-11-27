@@ -91,6 +91,6 @@
     <aop:config>  
         <aop:pointcut id="myPointCut" expression="execution(* com.daoman.task.service.*.*(..))"/>  
         <aop:advisor advice-ref="txAdvice" pointcut-ref="myPointCut"/>  
-    </aop:config>  
-    
+    </aop:config>
+
 </beans>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.daoman.task.persist.JobDefinitionMapper">
+	
+	<delete id="delete" parameterType="java.lang.Integer" >
+		delete from job_definition where id = #{id}
+	</delete>
+	
+	
+	<insert id="insert" parameterType="com.daoman.task.domain.job.JobDefinition" keyProperty="id" >
+		insert into job_definition (job_name,job_group, job_classpath, job_class_name,
+			cron, is_in_use, start_time, end_time, description,gmt_created,gmt_modified, single_running)
+		values (#{jobName},
+			#{jobGroup},
+			#{jobClasspath},
+			#{jobClassName},
+			#{cron},
+			#{isInUse},
+			now(),
+			#{endTime},
+			#{description},
+			now(),now(),
+			#{singleRunning})	
+	</insert>
+	
+	<sql id="fullColumn">
+		jd.`id`,
+		jd.`gmt_created`,
+		jd.`gmt_modified`,
+		jd.`job_name` as jobName,
+		jd.`job_group` as jobGroup,
+		jd.`job_classpath` as jobClasspath,
+		jd.`job_class_name` as jobClassName,
+		jd.`description`,
+		jd.`cron`,
+		jd.`is_in_use` as isInUse,
+		jd.`start_time` as startTime,
+		jd.`end_time` as endTime,
+		jd.`single_running` as singleRunning
+	</sql>
+	
+	<!-- <sql id="where_cond">
+	
+		<where>
+		</where>
+		
+	</sql> -->
+	
+	<select id="queryAll"  resultType="com.daoman.task.domain.job.JobDefinition"  >
+		select
+			<include refid="fullColumn" />
+		from `job_definition` jd
+	</select>
+	
+</mapper>
+

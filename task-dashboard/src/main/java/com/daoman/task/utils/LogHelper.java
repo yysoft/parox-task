@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.daoman.task.config;
+package com.daoman.task.utils;
 
 import org.apache.log4j.Logger;
 

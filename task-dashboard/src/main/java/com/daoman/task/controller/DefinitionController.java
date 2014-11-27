@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.daoman.task.domain.Pager;
-import com.daoman.task.domain.definition.JobDefinition;
+import com.daoman.task.domain.job.JobDefinition;
 
 /**
  * @author parox

@@ -21,6 +21,7 @@ PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
 -->
     <mappers>
         <mapper resource="mybatis/test.xml" />
+        <mapper resource="mybatis/job_definition.xml" />
         
     </mappers>
 

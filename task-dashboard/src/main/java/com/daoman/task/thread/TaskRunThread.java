@@ -32,7 +32,7 @@ public class TaskRunThread extends Thread {
 	
 	Date targetDate;
 	
-	Logger LOG = Logger.getLogger("com.zz91.task");
+	Logger LOG = Logger.getLogger("com.daoman.task");
 
 	public TaskRunThread() {
 
@@ -48,7 +48,7 @@ public class TaskRunThread extends Thread {
 
 	@Override
 	public void run() {
-		//LOG.debug("taskbasetime:"+targetDate.getTime()+" 任务开始。。。。");
+//		LOG.debug("taskbasetime:"+targetDate.getTime()+" 任务开始。。。。");
 		JobStatus status = new JobStatus();
 		Date start = new Date();
 		if(targetDate==null){
@@ -62,7 +62,8 @@ public class TaskRunThread extends Thread {
 			status.setGmtBasetime(targetDate);
 			status.setGmtTrigger(start);
 			status.setResult("运行中...");
-			status.setId(jobStatusService.save(status));
+			status.setCategory(JobStatus.CATEGORY_MANUAL);
+			jobStatusService.save(status);
 			LOG.debug("taskbasetime:"+targetDate.getTime()+" 准备。。。。");
 			
 			CronTask jobInstance = (CronTask) ClassHelper.load(

@@ -1,6 +1,4 @@
 /**
- * Copyright 2010 ASTO.
- * All right reserved.
  * Created on Oct 20, 2010
  */
 package com.daoman.task;
@@ -25,7 +23,7 @@ import java.util.Date;
  */
 public interface CronTask {
 	
-	public boolean init() throws Exception;
+//	public boolean init() throws Exception;
 	
 	public boolean exec(Date baseDate) throws Exception;
 	

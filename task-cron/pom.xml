@@ -11,9 +11,9 @@
 	</parent>
 
 	<groupId>com.daoman</groupId>
-	<artifactId>task-corn</artifactId>
+	<artifactId>task-cron</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<name>task-corn</name>
+	<name>task-cron</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

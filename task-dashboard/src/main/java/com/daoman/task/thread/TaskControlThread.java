@@ -28,10 +28,10 @@ public class TaskControlThread extends Thread {
 
 	private static TaskRunThreadPool mainPool; // 任务执行线程池
 
-	private int corePoolSize = 2; // 池中最小线程数量：2
+	private int corePoolSize = 1; // 池中最小线程数量：2
 	private int maximumPoolSize = 5; // 同时存在的最大线程数量：10
 	private long keepAliveTime = 5; // 线程空闲保持时间：5秒
-	private int workQueueSize = 20; // 工作队列最大值:100
+	private int workQueueSize = 10; // 工作队列最大值:100
 
 	private static long numTask = 0; // 已处理数量
 	private static long totalTime = 0; // 总处理时间
@@ -46,7 +46,7 @@ public class TaskControlThread extends Thread {
 	public final static Map<String, Long> LAST_BUILD_TIME_MAP = new ConcurrentHashMap<String, Long>();
 	
 //	public static Map<String, TaskRunThread> runningThread = new ConcurrentHashMap<String, TaskRunThread>();
-	public static boolean runSwitch = false;
+	public static boolean runSwitch = true;
 
 	public TaskControlThread(int corePoolSize, int maximumPoolSize,
 			long keepAliveTime, int workQueueSize) {
@@ -80,6 +80,10 @@ public class TaskControlThread extends Thread {
 
 			//普通任务
 			for (String jobname : runningTasks.keySet()) {
+				
+				//如果是single run 
+				//nextfiretime 可放到zookeeper内，作为公共配置
+				
 				JobDefinition task = runningTasks.get(jobname);
 				
 				//如果nexttime为null，表示已经执行过了，此时重新计算nexttime并写入nexttime
@@ -99,7 +103,9 @@ public class TaskControlThread extends Thread {
 					}
 				}else{
 					if(now.getTime()>=task.getNextFireTime() && getTaskSize()<=workQueueSize){
-						mainPool.execute(new TaskRunThread(task,jobDefinitionService, jobStatusService));
+						TaskRunThread runThread = new TaskRunThread(task,jobDefinitionService, jobStatusService);
+						runThread.setName("TaskThread_"+task.getJobName());
+						mainPool.execute(runThread);
 						task.setNextFireTime(null);
 					}
 				}

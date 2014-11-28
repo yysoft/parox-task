@@ -8,6 +8,12 @@ public class JobDefinition extends BaseDomain{
 	
 	
 	private static final long serialVersionUID = 1643190952324185481L;
+	
+	public static final String GROUP_TASK="task";
+	public static final String GROUP_IDX="idx_task";
+	
+	public static final int INUSE_TRUE= 1;
+	public static final int INUSE_FALSE= 0;
 
 	private String jobName;
 	private String jobGroup;
@@ -15,7 +21,7 @@ public class JobDefinition extends BaseDomain{
 	private String jobClassName;
 	private String description;
 	private String cron;
-	private String isInUse; //停用0启用1
+	private Integer isInUse; //停用0启用1
 	private Date startTime;
 	private Date endTime;
 	private Long nextFireTime;
@@ -138,20 +144,6 @@ public class JobDefinition extends BaseDomain{
 	}
 
 	/**
-	 * @return the isInUse
-	 */
-	public String getIsInUse() {
-		return isInUse;
-	}
-
-	/**
-	 * @param isInUse the isInUse to set
-	 */
-	public void setIsInUse(String isInUse) {
-		this.isInUse = isInUse;
-	}
-
-	/**
 	 * @return the nextFireTime
 	 */
 	public Long getNextFireTime() {
@@ -171,6 +163,14 @@ public class JobDefinition extends BaseDomain{
 
 	public void setSingleRunning(String singleRunning) {
 		this.singleRunning = singleRunning;
+	}
+
+	public Integer getIsInUse() {
+		return isInUse;
+	}
+
+	public void setIsInUse(Integer isInUse) {
+		this.isInUse = isInUse;
 	}
 	
 	

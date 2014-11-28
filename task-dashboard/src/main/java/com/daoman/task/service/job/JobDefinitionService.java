@@ -3,12 +3,18 @@
  */
 package com.daoman.task.service.job;
 
+import java.util.List;
+
+import com.daoman.task.domain.job.JobDefinition;
+
 
 /**
  * @author mays
  *
  */
 public interface JobDefinitionService {
+	
+	public List<JobDefinition> queryAll(Boolean isInUse);
 
 //	public Pager<Product> pager(Pager<Product> pager, ProductCond cond);
 //	

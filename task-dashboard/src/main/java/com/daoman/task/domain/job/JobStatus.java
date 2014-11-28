@@ -14,6 +14,10 @@ public class JobStatus extends BaseDomain{
 	public static final String SUCCESS="success";
 	public static final String FAILED="failed";
 	
+	public final static String CATEGORY_SCHEDULER="scheduler";
+	public final static String CATEGORY_MANUAL="manual";
+	
+	
 	private String jobName;
 	private Date gmtBasetime;
 	private String result;

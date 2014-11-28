@@ -42,17 +42,16 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		jd.`single_running` as singleRunning
 	</sql>
 	
-	<!-- <sql id="where_cond">
-	
-		<where>
-		</where>
-		
-	</sql> -->
-	
-	<select id="queryAll"  resultType="com.daoman.task.domain.job.JobDefinition"  >
+	<select id="queryAll"  resultType="com.daoman.task.domain.job.JobDefinition" >
 		select
 			<include refid="fullColumn" />
 		from `job_definition` jd
+		<where >
+			<if test="inUse != null">
+				is_in_use = #{inUse}
+			</if>
+		</where>
+		limit 100
 	</select>
 	
 </mapper>

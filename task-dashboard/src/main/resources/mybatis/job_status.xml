@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.daoman.task.persist.JobStatusMapper">
+	
+	<insert id="insert" parameterType="com.daoman.task.domain.job.JobStatus" keyProperty="id" >
+		INSERT INTO `job_status`
+			(
+			`job_name`,
+			`gmt_basetime`,
+			`result`,
+			`runtime`,
+			`gmt_trigger`,
+			`error_msg`,
+			`category`,
+			`num_retry`,
+			`gmt_created`,
+			`gmt_modified`,
+			`node_key`)
+		VALUES (
+			#{jobName},
+			#{gmtBasetime},
+			#{result},
+			#{runtime},
+			#{gmtTrigger},
+			#{errorMsg},
+			#{category},
+			#{numRetry},
+			now(),now(),
+			#{nodeKey}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.daoman.task.domain.job.JobStatus">
+		update `job_status` set
+			<if test="jobName != null">
+			`job_name` = #{jobName},
+			</if>
+			<if test="gmtBasetime != null">
+			`gmt_basetime` = #{gmtBasetime},
+			</if>
+			<if test="result != null">
+			`result` = #{result},
+			</if>
+			<if test="runtime != null">
+			`runtime` = #{runtime},
+			</if>
+			<if test="gmtTrigger != null">
+			`gmt_trigger` = #{gmtTrigger},
+			</if>
+			<if test="errorMsg != null">
+			`error_msg` = #{errorMsg},
+			</if>
+			<if test="category != null">
+			`category` = #{category},
+			</if>
+			<if test="numRetry != null">
+			`num_retry` = #{numRetry},
+			</if>
+			<if test="nodeKey != null">
+			`node_key` = #{nodeKey},
+			</if>
+			gmt_modified=now()
+		where id=#{id}
+	</update>
+	
+</mapper>
+

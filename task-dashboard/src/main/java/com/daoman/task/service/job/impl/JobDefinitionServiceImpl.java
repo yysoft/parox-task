@@ -3,10 +3,13 @@
  */
 package com.daoman.task.service.job.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.persist.JobDefinitionMapper;
 import com.daoman.task.service.job.JobDefinitionService;
 
@@ -19,6 +22,17 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	
 	@Resource
 	private JobDefinitionMapper jobDefinitionMapper;
+
+	@Override
+	public List<JobDefinition> queryAll(Boolean isInUse) {
+		
+		Integer inuse = null;
+		if(isInUse!=null){
+			inuse = isInUse?JobDefinition.INUSE_TRUE:JobDefinition.INUSE_FALSE;
+		}
+		
+		return jobDefinitionMapper.queryAll(inuse);
+	}
 	
 	
 //	@Resource

@@ -29,7 +29,7 @@
 	<modules>
 		<module>task-dashboard</module>
     <module>task-common</module>
-    <module>task-corn</module>
+    <module>task-cron</module>
   </modules>
 
 	<dependencyManagement>

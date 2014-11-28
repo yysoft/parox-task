@@ -5,6 +5,8 @@ package com.daoman.task.persist;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.daoman.task.domain.job.JobDefinition;
 
 /**
@@ -17,5 +19,5 @@ public interface JobDefinitionMapper {
 	
 	public Integer delete(Integer id);
 	
-	public List<JobDefinition>queryAll();
+	public List<JobDefinition>queryAll( @Param("inUse") Integer inUse);
 }

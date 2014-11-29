@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.ACL;
@@ -45,8 +47,64 @@ public class Test {
 		zk.addAuthInfo("digest", "parox:parox606".getBytes());
 		zk.create("/test", "data".getBytes(), acls, CreateMode.EPHEMERAL);
 		
-		String result = zk.create("/test", "data2".getBytes(), acls, CreateMode.EPHEMERAL);
+		String result=null;
+//		result = zk.create("/parox", "".getBytes(), acls, CreateMode.PERSISTENT);
+//		System.out.println(result);
+//		result = zk.create("/parox/task", "".getBytes(), acls, CreateMode.PERSISTENT);
+//		System.out.println(result);
+		result = zk.create("/parox/task/task1_", "".getBytes(), acls, CreateMode.EPHEMERAL_SEQUENTIAL);
 		System.out.println(result);
+		result = zk.create("/parox/task/task2_", "".getBytes(), acls, CreateMode.EPHEMERAL_SEQUENTIAL);
+		System.out.println(result);
+		result = zk.create("/parox/task/task3_", "".getBytes(), acls, CreateMode.EPHEMERAL_SEQUENTIAL);
+		System.out.println(result);
+		result = zk.create("/parox/task/task4_", "".getBytes(), acls, CreateMode.EPHEMERAL_SEQUENTIAL);
+		System.out.println(result);
+		
+		List<String> child = zk.getChildren("/parox/task", new Watcher() {
+			
+			@Override
+			public void process(WatchedEvent event) {
+				System.out.println(event.getPath()+"   "+event.getType());
+			}
+		});
+		
+		String preNode = null;
+		for(String c:child){
+			if(c.equals(result.substring("/parox/task/".length()))){
+				break;
+			}
+			preNode = c;
+		}
+		
+		zk.getData("/parox/task/"+preNode, new Watcher() {
+			
+			@Override
+			public void process(WatchedEvent event) {
+				System.out.println(event.getPath()+"   "+event.getType());
+				//拿到锁
+			}
+			
+		}, null);
+		
+		zk.delete("/parox/task/"+preNode, -1);
+		
+//		zk.getData(result, new Watcher() {
+//			
+//			@Override
+//			public void process(WatchedEvent event) {
+//				System.out.println(event.getPath()+"   "+event.getType());
+//			}
+//			
+//		}, null);
+//		
+//		zk.setData(result, "update3".getBytes(), -1);
+//		
+//		zk.delete(result, -1);
+		
+		
+		
+//		zk.delete("/parox", -1);
 		
 //		ZooKeeper zk = new ZooKeeper("127.0.0.1:2181", 2000, new Watcher() {
 //			

@@ -18,6 +18,7 @@ import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
 
 import com.google.common.collect.Lists;
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 /**
  * @author parox
@@ -48,6 +49,10 @@ public class Test {
 		zk.create("/test", "data".getBytes(), acls, CreateMode.EPHEMERAL);
 		
 		String result=null;
+		
+		result = zk.create("/parox/task/test", "".getBytes(), acls, CreateMode.PERSISTENT);
+//		zk.delete("/parox/task/test", -1);
+		
 //		result = zk.create("/parox", "".getBytes(), acls, CreateMode.PERSISTENT);
 //		System.out.println(result);
 //		result = zk.create("/parox/task", "".getBytes(), acls, CreateMode.PERSISTENT);

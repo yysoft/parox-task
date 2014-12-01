@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.ZooKeeper;
 
 import com.daoman.task.CronTask;
 import com.daoman.task.domain.job.JobDefinition;
@@ -17,6 +19,7 @@ import com.daoman.task.service.job.JobDefinitionService;
 import com.daoman.task.service.job.JobStatusService;
 import com.daoman.task.utils.ClassHelper;
 import com.daoman.task.utils.StacktraceUtil;
+import com.daoman.task.utils.ZookeeperUtil;
 
 /**
  * @author mays (mays@zz91.com)
@@ -32,7 +35,7 @@ public class TaskRunThread extends Thread {
 	
 	Date targetDate;
 	
-	Logger LOG = Logger.getLogger("com.daoman.task");
+	Logger LOG = Logger.getLogger(TaskRunThread.class);
 
 	public TaskRunThread() {
 
@@ -62,7 +65,7 @@ public class TaskRunThread extends Thread {
 			status.setGmtBasetime(targetDate);
 			status.setGmtTrigger(start);
 			status.setResult("运行中...");
-			status.setCategory(JobStatus.CATEGORY_MANUAL);
+			status.setCategory(JobStatus.CATEGORY_SCHEDULER);
 			jobStatusService.save(status);
 			LOG.debug("taskbasetime:"+targetDate.getTime()+" 准备。。。。");
 			
@@ -97,10 +100,24 @@ public class TaskRunThread extends Thread {
 			status.setErrorMsg(StacktraceUtil.getStackTrace(e));
 		}
 		
+		releaseLock();
+		
 		Date end = new Date();
 		status.setRuntime(end.getTime() - start.getTime());
 		LOG.debug("taskbasetime:"+targetDate.getTime()+" 任务执行结束。。。。");
 		jobStatusService.updateById(status);
+	}
+	
+	private void releaseLock(){
+		LOG.debug("Releasing lock. job name is "+definition.getJobName());
+		ZooKeeper zk =ZookeeperUtil.getInstance().getZKClient();
+		try {
+			zk.delete(TaskControlThread.getLockPath(definition.getJobName(), definition.getNextFireTime()), -1);
+		} catch (InterruptedException e) {
+			LOG.error("Failure unlock task lock. job name is "+definition.getJobName(), e);
+		} catch (KeeperException e) {
+			LOG.error("Failure unlock task lock. job name is "+definition.getJobName(), e);
+		}
 	}
 
 	public void setJobDefinitionService(JobDefinitionService service) {

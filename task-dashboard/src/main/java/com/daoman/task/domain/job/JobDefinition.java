@@ -14,6 +14,9 @@ public class JobDefinition extends BaseDomain{
 	
 	public static final int INUSE_TRUE= 1;
 	public static final int INUSE_FALSE= 0;
+	
+	public static final String RUNNING_SINGLE="SINGLE";
+	public static final String RUNNING_MULITY="MULITY";
 
 	private String jobName;
 	private String jobGroup;

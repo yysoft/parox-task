@@ -13,11 +13,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.ZooKeeper;
 import org.quartz.CronExpression;
 
 import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.service.job.JobDefinitionService;
 import com.daoman.task.service.job.JobStatusService;
+import com.daoman.task.utils.ZookeeperUtil;
 
 /**
  * @author mays (mays@zz91.com)
@@ -25,7 +30,7 @@ import com.daoman.task.service.job.JobStatusService;
  *         created on 2011-3-18
  */
 public class TaskControlThread extends Thread {
-
+	
 	private static TaskRunThreadPool mainPool; // 任务执行线程池
 
 	private int corePoolSize = 1; // 池中最小线程数量：2
@@ -47,6 +52,8 @@ public class TaskControlThread extends Thread {
 	
 //	public static Map<String, TaskRunThread> runningThread = new ConcurrentHashMap<String, TaskRunThread>();
 	public static boolean runSwitch = true;
+	
+	final static Logger LOG = Logger.getLogger(TaskControlThread.class);
 
 	public TaskControlThread(int corePoolSize, int maximumPoolSize,
 			long keepAliveTime, int workQueueSize) {
@@ -86,56 +93,59 @@ public class TaskControlThread extends Thread {
 				
 				JobDefinition task = runningTasks.get(jobname);
 				
-				//如果nexttime为null，表示已经执行过了，此时重新计算nexttime并写入nexttime
-				//否则判断当前时间是否大于nexttime，如果是则执行
-				
-				if(task.getNextFireTime()==null){
-					
-					CronExpression cron;
-					try {
-						cron = new CronExpression(task.getCron());
-						if(CronExpression.isValidExpression(task.getCron())){
-							Date nextFireTime=cron.getNextValidTimeAfter(now);
-							task.setNextFireTime(nextFireTime.getTime());
-						}
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-				}else{
-					if(now.getTime()>=task.getNextFireTime() && getTaskSize()<=workQueueSize){
-						TaskRunThread runThread = new TaskRunThread(task,jobDefinitionService, jobStatusService);
-						runThread.setName("TaskThread_"+task.getJobName());
-						mainPool.execute(runThread);
-						task.setNextFireTime(null);
-					}
+				if(JobDefinition.RUNNING_MULITY.equalsIgnoreCase(task.getSingleRunning())){
+					runTask(task);
+					continue ;
 				}
-			}
-			
-//			//索引优化任务
-//			for(String jobname:BUILD_TASK_MAP.keySet()){
-//				AbstractIdxTask task=BUILD_TASK_MAP.get(jobname);
-//				if(task.getNextFireTime() == null){
+				
+				Long nextFireTime = getNextFireTime(jobname);
+				
+				if(nextFireTime==null){
+					resetNextFireTime(task, now);
+					continue ;
+				}
+				
+				if(now.getTime()>= nextFireTime.longValue() && getTaskSize()<=workQueueSize){
+					//获取锁
+					
+					if(!holdLock(jobname, nextFireTime)){
+						continue ;
+					}
+					
+					task.setNextFireTime(nextFireTime);
+					runTask(task);
+					
+					deleteNextFireTime(jobname, nextFireTime);
+					
+				}
+				
+//				//如果nexttime为null，表示已经执行过了，此时重新计算nexttime并写入nexttime
+//				//否则判断当前时间是否大于nexttime，如果是则执行
+//				
+//				if(task.getNextFireTime()==null){
+//					
 //					CronExpression cron;
 //					try {
 //						cron = new CronExpression(task.getCron());
 //						if(CronExpression.isValidExpression(task.getCron())){
-//							Date nextFireTime=cron.getNextValidTimeAfter(now);
-//							task.setNextFireTime(nextFireTime.getTime());
+//							Date nextFireTimeDate=cron.getNextValidTimeAfter(now);
+//							task.setNextFireTime(nextFireTimeDate.getTime());
 //						}
 //					} catch (ParseException e) {
 //						e.printStackTrace();
 //					}
 //				}else{
 //					if(now.getTime()>=task.getNextFireTime() && getTaskSize()<=workQueueSize){
-//						mainPool.execute(new OptimizeThread(jobname, jobStatusService));
+//						
+//						runTask(task);
+//						
 //						task.setNextFireTime(null);
 //					}
 //				}
-//			}
+				
+			}
 			
-			TaskControlThread.numTask = mainPool.getNumTask();
-			TaskControlThread.totalTime = mainPool.getTotalTime();
-			TaskControlThread.numQueue = mainPool.getQueue().size();
+			statisticPool();
 
 			try {
 				Thread.sleep(1000);
@@ -143,6 +153,100 @@ public class TaskControlThread extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void deleteNextFireTime(String jobname, Long nextfiretime){
+		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
+		try {
+			zk.delete(getNextFireTimePath(jobname), -1);
+		} catch (InterruptedException e) {
+			LOG.debug("Failure delete next fire time. time is "+nextfiretime, e);
+		} catch (KeeperException e) {
+			LOG.debug("Failure delete next fire time. time is "+nextfiretime, e);
+		}
+	}
+	
+	public static String getLockPath(String jobname, Long nextfiretime){
+		return PATH_ROOT+"/"+jobname+"/lock_"+nextfiretime;
+	}
+	
+	private boolean holdLock(String jobname, Long nextfiretime){
+		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
+		
+		try {
+			zk.create(getLockPath(jobname, nextfiretime), jobname.getBytes(), ZookeeperUtil.getInstance().getAcl(), CreateMode.EPHEMERAL);
+			LOG.debug("Successfully get lock. job name is "+jobname);
+			return true;
+		} catch (KeeperException e) {
+			LOG.error("Failure get lock. job name is "+jobname, e);
+		} catch (InterruptedException e) {
+			LOG.error("Failure get lock. job name is "+jobname, e);
+		}
+		return false;
+	}
+	
+	private void resetNextFireTime(JobDefinition task, Date now){
+		CronExpression cron;
+		try {
+			cron = new CronExpression(task.getCron());
+			if(CronExpression.isValidExpression(task.getCron())){
+				Date nextFireTimeDate=cron.getNextValidTimeAfter(now);
+				
+				ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
+				
+				String nft = String.valueOf(nextFireTimeDate.getTime());
+				
+				try {
+					zk.create(getNextFireTimePath(task.getJobName()), nft.getBytes(), ZookeeperUtil.getInstance().getAcl(), CreateMode.EPHEMERAL);
+					LOG.debug("Successfully reset next fire time. job name is "+task.getJobName());
+				} catch (KeeperException e) {
+					LOG.error("Next fire time not reset. job name is "+task.getJobName(), e);
+				} catch (InterruptedException e) {
+					LOG.error("Next fire time not reset. job name is "+task.getJobName(), e);
+				}
+				
+			}
+			
+		} catch (ParseException e) {
+			LOG.error("Can not parse cron exception. job name is "+task.getJobName(), e);
+		}
+	}
+	
+	private String getNextFireTimePath(String jobname){
+		return PATH_ROOT+"/"+jobname+"/next_fire_time";
+	}
+	
+	static final String PATH_ROOT="/parox/task";
+	
+	private Long getNextFireTime(String jobname){
+		
+		
+		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
+		try {
+			
+			byte[] nft=zk.getData(getNextFireTimePath(jobname), null, null);
+			Long nextFireTime= Long.valueOf(new String(nft));
+			
+			return nextFireTime;
+		} catch (KeeperException e1) {
+			LOG.error("Can not get next_fire_time from zookeeper, job name is "+jobname, e1);
+		} catch (InterruptedException e1) {
+			LOG.error("Can not get next_fire_time from zookeeper, job name is "+jobname, e1);
+		}
+		return null;
+	}
+	
+	private void runTask(JobDefinition task){
+		//XXX 可在此处设置服务器运行数（在任务运行结束后从zookeeper删除），以便做不同服务器之间的负载
+		TaskRunThread runThread = new TaskRunThread(task,jobDefinitionService, jobStatusService);
+		runThread.setName("TaskThread_"+task.getJobName());
+		mainPool.execute(runThread);
+	}
+	
+	private void statisticPool(){
+		TaskControlThread.numTask = mainPool.getNumTask();
+		TaskControlThread.totalTime = mainPool.getTotalTime();
+		TaskControlThread.numQueue = mainPool.getQueue().size();
 	}
 	
 	

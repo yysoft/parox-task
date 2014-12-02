@@ -18,7 +18,6 @@ import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
 
 import com.google.common.collect.Lists;
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 /**
  * @author parox
@@ -34,6 +33,12 @@ public class Test {
 	 * @throws KeeperException 
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException, IOException, KeeperException, InterruptedException {
+		
+		System.out.println(IpUtil.getRealIp());
+		
+	}
+	
+	public static void zk() throws NoSuchAlgorithmException, IOException, KeeperException, InterruptedException{
 		List<ACL> acls = Lists.newArrayList();
 		Id id1 = new Id("digest", DigestAuthenticationProvider.generateDigest("parox:parox606"));
 		
@@ -93,57 +98,6 @@ public class Test {
 		}, null);
 		
 		zk.delete("/parox/task/"+preNode, -1);
-		
-//		zk.getData(result, new Watcher() {
-//			
-//			@Override
-//			public void process(WatchedEvent event) {
-//				System.out.println(event.getPath()+"   "+event.getType());
-//			}
-//			
-//		}, null);
-//		
-//		zk.setData(result, "update3".getBytes(), -1);
-//		
-//		zk.delete(result, -1);
-		
-		
-		
-//		zk.delete("/parox", -1);
-		
-//		ZooKeeper zk = new ZooKeeper("127.0.0.1:2181", 2000, new Watcher() {
-//			
-//			@Override
-//			public void process(WatchedEvent event) {
-////				System.out.println("EVENT PATH>>>>>>>"+event.getPath());
-//				System.out.println("EVENT PATH>>>>>>>"+JSONObject.fromObject(event).toString());
-//			}
-//			
-//		});
-//		
-//		zk.addAuthInfo("digest", "parox:parox606".getBytes());
-////		zk.create("/test", "data".getBytes(), acls, CreateMode.PERSISTENT);
-//		byte[] result = zk.getData("/test", false, null);
-//		
-//		System.out.println(new String(result));
-//		
-//		zk.setData("/test", "update data1".getBytes(), 1);
-//		
-//		result = zk.getData("/test", false, null);
-//		
-//		System.out.println(new String(result));
-//		
-//		zk.getData("/test", new Watcher() {
-//			
-//			@Override
-//			public void process(WatchedEvent event) {
-//				System.out.println("EVENT TYPE"+event.getType().name());
-//			}
-//			
-//		}, null);
-//		
-//		zk.create("/test", "update".getBytes(), null, createMode)
-//		zk.delete("/test", 0);
 	}
 
 }

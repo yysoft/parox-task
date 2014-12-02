@@ -9,7 +9,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.daoman.task.domain.Pager;
 import com.daoman.task.domain.job.JobDefinition;
+import com.daoman.task.domain.job.JobDefinitionCond;
 import com.daoman.task.persist.JobDefinitionMapper;
 import com.daoman.task.service.job.JobDefinitionService;
 
@@ -33,162 +35,46 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 		
 		return jobDefinitionMapper.queryAll(inuse);
 	}
+
+
+	@Override
+	public JobDefinition save(JobDefinition definition) {
+		// TODO Auto-generated method stub
+		//需要初始化一些必要的参数信息
+		return null;
+	}
+
+	@Override
+	public JobDefinition queryOne(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JobDefinition queryOne(String jobname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer update(JobDefinition definition) {
+		// TODO Auto-generated method stub
+		//is_in_use 不在更新范围内
+		return null;
+	}
+
+	@Override
+	public Integer remove(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Pager<JobDefinition> pageDefault(JobDefinitionCond cond,
+			Pager<JobDefinition> page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
-	
-//	@Resource
-//	private ProductMapper productMapper;
-//	@Resource
-//	private ProductPriceMapper productPriceMapper;
-//	@Resource
-//	private ProductDefineMapper productDefineMapper;
-//
-//	@Override
-//	public Pager<Product> pager(Pager<Product> pager, ProductCond cond) {
-//		
-//		pager.setRecords(productMapper.pagerDefault(pager, cond));
-//		pager.setTotals(productMapper.pagerDefaultCount(cond));
-//		
-//		return pager;
-//	}
-//
-//	@Override
-//	public Product update(Product product) {
-//		
-//		Integer impact = productMapper.update(product);
-//		if(impact!=null && impact.intValue()>0){
-//			return product;
-//		}
-//		
-//		return null;
-//	}
-//
-//	@Override
-//	public Integer remove(Integer id) {
-//		
-//		Integer impact = productMapper.delete(id);
-//		if(impact==null||impact.intValue()<=0){
-//			return null;
-//		}
-//		
-//		productDefineMapper.deleteByPid(id);
-//		productPriceMapper.deleteByPid(id);
-//		
-//		return impact;
-//	}
-//
-//	@Override
-//	public Product queryOne(Integer id, SessionUser user) {
-//		
-//		if(!available(id, user)){
-//			return null;
-//		}
-//		
-//		return productMapper.queryOne(id);
-//	}
-//
-//	@Override
-//	public ProductFull saveFull(ProductFull productFull) {
-//		
-//		if(productFull==null || productFull.getProduct()==null ){
-//			return null;
-//		}
-//		
-//		//初始化
-//		Product product = productFull.getProduct();
-//		
-//		product.setStatusLife(Product.LIFE_SALING);
-//		
-////		Integer impact = productMapper.insert(product);
-////		if(!AssertHelper.positiveInt(impact) || !AssertHelper.positiveInt(product.getId())){
-////			return null;
-////		}
-//		
-//		productFull.getDefine().setProductId(product.getId());
-//		productDefineMapper.insert(productFull.getDefine());
-//		
-//		batchSavePrice(productFull.getPrice(), product.getId());
-//		
-//		return null;
-//	}
-//	
-//	private void batchSavePrice(List<ProductPrice> list, Integer pid) {
-//		
-//		if(list == null){
-//			return ;
-//		}
-//		
-//		for(ProductPrice price: list){
-//			price.setProductId(pid);
-//			productPriceMapper.insert(price);
-//		}
-//		
-//	}
-//	
-//	@Override
-//	public ProductFull queryOneFull(Integer id, Boolean readDefine, SessionUser user) {
-//		
-//		if(!available(id, user)){
-//			return null;
-//		}
-//		
-//		readDefine = readDefine == null?true:readDefine;
-//		
-//		Product product = productMapper.queryOne(id);
-//		if(product==null){
-//			return null;
-//		}
-//		
-//		ProductFull full = new ProductFull();
-//		full.setProduct(product);
-//		full.setDefine(productDefineMapper.queryOneByPid(id));
-//		List<ProductPrice> priceList = productPriceMapper.queryByPid(id, null, new Date());
-//		full.setPrice(priceList);
-//		
-//		return full;
-//	}
-//
-//	public boolean available(Integer id, SessionUser user){
-//		if(id==null||id.intValue()<=0){
-//			return false;
-//		}
-//		
-//		//FIXME v1 验证用户对产品信息的访问权限
-//		return true;
-//	}
-//
-//	@Override
-//	public ProductFull updateFull(ProductFull productFull) {
-//		
-//		if(productFull==null || productFull.getProduct()==null ){
-//			return null;
-//		}
-//		
-//		//初始化
-//		Product product = productFull.getProduct();
-//		
-////		Integer impact = productMapper.update(productFull.getProduct());
-////		if(!AssertHelper.positiveInt(impact) || !AssertHelper.positiveInt(product.getId())){
-////			return null;
-////		}
-//		
-//		productFull.getDefine().setProductId(product.getId());
-//		productDefineMapper.updateByPid(productFull.getDefine());
-//		
-//		return productFull;
-//	}
-//
-//	@Override
-//	public ProductFull initFull(SessionUser user, Product product,
-//			ProductDefine define) {
-//		
-//		ProductFull productFull = new ProductFull();
-//		productFull.setProduct(product);
-//		productFull.setDefine(define);
-//		
-//		product.setUidCreated(user.getUid());
-//		product.setUidModified(user.getUid());
-//		product.setCid(user.getCid());
-//		
-//		return productFull;
-//	}
 }

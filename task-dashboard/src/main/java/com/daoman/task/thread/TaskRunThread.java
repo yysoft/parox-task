@@ -18,6 +18,7 @@ import com.daoman.task.domain.job.JobStatus;
 import com.daoman.task.service.job.JobDefinitionService;
 import com.daoman.task.service.job.JobStatusService;
 import com.daoman.task.utils.ClassHelper;
+import com.daoman.task.utils.IpUtil;
 import com.daoman.task.utils.StacktraceUtil;
 import com.daoman.task.utils.ZookeeperUtil;
 
@@ -61,11 +62,12 @@ public class TaskRunThread extends Thread {
 			
 //			jobDefinitionService.updateStartDateById(start, definition.getId());
 			
-			status.setJobName(definition.getJobName()+"_eclipse");
+			status.setJobName(definition.getJobName());
 			status.setGmtBasetime(targetDate);
 			status.setGmtTrigger(start);
 			status.setResult("运行中...");
 			status.setCategory(JobStatus.CATEGORY_SCHEDULER);
+			status.setNodeKey(IpUtil.getRealIp());
 			jobStatusService.save(status);
 			LOG.debug("taskbasetime:"+targetDate.getTime()+" 准备。。。。");
 			

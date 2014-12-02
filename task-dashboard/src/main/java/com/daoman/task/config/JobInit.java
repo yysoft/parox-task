@@ -5,8 +5,6 @@ package com.daoman.task.config;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import net.caiban.db.YYConnPool;
@@ -31,7 +29,7 @@ public class JobInit {
 	@Resource
 	private JobStatusService jobStatusService;
 	
-	@PostConstruct
+//	@PostConstruct
 	public void init(){
 		YYConnPool.getInstance().initConnPools(null);
 		
@@ -62,8 +60,10 @@ public class JobInit {
 		}
 	}
 	
-	@PreDestroy
+//	@PreDestroy
 	public void destroy(){
+		//TODO 处理剩下没有处理完的任务后退出
+//		TaskControlThread.runSwitch = false;
 		YYConnPool.getInstance().destoryConnectionPools();
 	}
 	

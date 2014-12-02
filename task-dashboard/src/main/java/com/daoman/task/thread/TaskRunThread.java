@@ -61,7 +61,7 @@ public class TaskRunThread extends Thread {
 			
 //			jobDefinitionService.updateStartDateById(start, definition.getId());
 			
-			status.setJobName(definition.getJobName());
+			status.setJobName(definition.getJobName()+"_eclipse");
 			status.setGmtBasetime(targetDate);
 			status.setGmtTrigger(start);
 			status.setResult("运行中...");

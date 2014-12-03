@@ -105,9 +105,10 @@ public class TaskControlThread extends Thread {
 					continue ;
 				}
 				
-				if(now.getTime()>= nextFireTime.longValue() && getTaskSize()<=workQueueSize){
+				if (now.getTime() >= nextFireTime.longValue()
+						&& (getTaskSize() < workQueueSize
+						|| getActivityCount() < maximumPoolSize)) {
 					//获取锁
-					
 					if(!holdLock(jobname, nextFireTime)){
 						continue ;
 					}
@@ -216,7 +217,7 @@ public class TaskControlThread extends Thread {
 		return PATH_ROOT+"/"+jobname+"/next_fire_time";
 	}
 	
-	static final String PATH_ROOT="/parox/task";
+	static final String PATH_ROOT="/parox/task/job";
 	
 	private Long getNextFireTime(String jobname){
 		
@@ -316,6 +317,18 @@ public class TaskControlThread extends Thread {
 
 	public static int getTaskSize(){
 		return mainPool.getQueue().size();
+	}
+	
+	public static int getActivityCount(){
+		return mainPool.getActiveCount();
+	}
+	
+	public static int getPoolSize(){
+		return mainPool.getPoolSize();
+	}
+	
+	public static boolean isRunning(String jobname){
+		return runningTasks.get(jobname)!=null;
 	}
 	
 }

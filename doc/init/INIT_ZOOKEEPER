@@ -1,0 +1,12 @@
+create /parox parox
+create /parox/task task
+create /parox/task/config config
+create /parox/task/config/jar_upload_root /home/parox/static/task/jar
+create /parox/task/config/jar_download_url http://127.0.0.1:8080/task/jar.do
+
+create /parox/task/job job
+...
+
+create /parox/task/job_list job_list
+...
+

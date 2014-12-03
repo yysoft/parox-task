@@ -12,6 +12,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.ACL;
@@ -57,7 +59,12 @@ public class ZookeeperUtil {
 			try {
 				Map<String, String> conf = FileUtil.readPropertyFile("config.properties", "utf-8");
 				String zkhost = conf.get("zk.server");
-				zkClient = new ZooKeeper(zkhost, 2000, null);
+				zkClient = new ZooKeeper(zkhost, 2000, new Watcher() {
+					@Override
+					public void process(WatchedEvent event) {
+						
+					}
+				});
 				
 				zkClient.addAuthInfo("digest", conf.get("zk.digest.project").getBytes());
 				zkClient.addAuthInfo("digest", conf.get("zk.digest.app").getBytes());

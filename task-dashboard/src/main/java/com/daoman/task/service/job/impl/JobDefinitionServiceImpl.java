@@ -14,6 +14,7 @@ import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.domain.job.JobDefinitionCond;
 import com.daoman.task.persist.JobDefinitionMapper;
 import com.daoman.task.service.job.JobDefinitionService;
+import com.google.common.base.Strings;
 
 /**
  * @author mays
@@ -52,8 +53,13 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 
 	@Override
 	public JobDefinition queryOne(String jobname) {
-		// TODO Auto-generated method stub
-		return null;
+		if(Strings.isNullOrEmpty(jobname)){
+			return null;
+		}
+		
+		JobDefinitionCond cond = new JobDefinitionCond();
+		cond.setJobName(jobname);
+		return jobDefinitionMapper.queryOne(cond);
 	}
 
 	@Override

@@ -54,5 +54,23 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		limit 100
 	</select>
 	
+	<select id="queryOne"  resultType="com.daoman.task.domain.job.JobDefinition" >
+		
+		select 	
+			<include refid="fullColumn" />
+		from `job_definition` jd
+		
+		<where >
+			<if test="jobName != null">
+				job_name = #{jobName}
+			</if>
+			<if test="id != null">
+				id = #{id}
+			</if>
+		</where>
+		
+		limit 1
+	</select>
+	
 </mapper>
 

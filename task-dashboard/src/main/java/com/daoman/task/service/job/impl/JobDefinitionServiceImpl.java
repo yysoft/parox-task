@@ -41,8 +41,8 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	@Override
 	public JobDefinition save(JobDefinition definition) {
 		// TODO Auto-generated method stub
-		//需要初始化一些必要的参数信息
-		return null;
+		//需要初始化一些必要的参数信息 //FIXME isInUse? jobGroup? endTime?
+		return jobDefinitionMapper.insert(definition);
 	}
 
 	@Override
@@ -66,13 +66,13 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	public Integer update(JobDefinition definition) {
 		// TODO Auto-generated method stub
 		//is_in_use 不在更新范围内
-		return null;
+		return jobDefinitionMapper.update(definition);
 	}
 
 	@Override
 	public Integer remove(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		return jobDefinitionMapper.delete(id);
 	}
 
 

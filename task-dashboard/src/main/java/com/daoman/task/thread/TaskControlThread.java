@@ -94,7 +94,7 @@ public class TaskControlThread extends Thread {
 				JobDefinition task = runningTasks.get(jobname);
 				
 				if(JobDefinition.RUNNING_MULITY.equalsIgnoreCase(task.getSingleRunning())){
-					runTask(task);
+					runTask(task, null);
 					continue ;
 				}
 				
@@ -113,8 +113,9 @@ public class TaskControlThread extends Thread {
 						continue ;
 					}
 					
-					task.setNextFireTime(nextFireTime);
-					runTask(task);
+//					task.setNextFireTime(nextFireTime);
+					//FIXME Caller 获取 thread 执行结果，成功后释放锁（现在释放锁有问题）
+					runTask(task, nextFireTime);
 					
 					deleteNextFireTime(jobname, nextFireTime);
 					
@@ -237,10 +238,12 @@ public class TaskControlThread extends Thread {
 		return null;
 	}
 	
-	private void runTask(JobDefinition task){
+	private void runTask(JobDefinition task, Long nextFireTime){
 		//XXX 可在此处设置服务器运行数（在任务运行结束后从zookeeper删除），以便做不同服务器之间的负载
 		TaskRunThread runThread = new TaskRunThread(task,jobDefinitionService, jobStatusService);
-		runThread.setName("TaskThread_"+task.getJobName());
+		if(nextFireTime!=null){
+			runThread.setReleaseLock(getLockPath(task.getJobName(), nextFireTime));
+		}
 		mainPool.execute(runThread);
 	}
 	

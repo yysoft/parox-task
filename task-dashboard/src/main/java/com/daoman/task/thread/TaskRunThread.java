@@ -37,6 +37,9 @@ public class TaskRunThread extends Thread {
 	Date targetDate;
 	
 	Logger LOG = Logger.getLogger(TaskRunThread.class);
+	
+	private String lockPath;
+	
 
 	public TaskRunThread() {
 
@@ -111,10 +114,16 @@ public class TaskRunThread extends Thread {
 	}
 	
 	private void releaseLock(){
+		
+		if(lockPath==null){
+			LOG.debug("There is no lock of job. job name is "+definition.getJobName());
+			return ;
+		}
+		
 		LOG.debug("Releasing lock. job name is "+definition.getJobName());
 		ZooKeeper zk =ZookeeperUtil.getInstance().getZKClient();
 		try {
-			zk.delete(TaskControlThread.getLockPath(definition.getJobName(), definition.getNextFireTime()), -1);
+			zk.delete(lockPath, -1);
 		} catch (InterruptedException e) {
 			LOG.error("Failure unlock task lock. job name is "+definition.getJobName(), e);
 		} catch (KeeperException e) {
@@ -132,6 +141,10 @@ public class TaskRunThread extends Thread {
 	
 	public void setTargetDate(Date targetDate){
 		this.targetDate = targetDate;
+	}
+	
+	public void setReleaseLock(String path){
+		this.lockPath=path;
 	}
 	
 }

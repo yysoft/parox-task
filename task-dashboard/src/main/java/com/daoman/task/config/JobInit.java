@@ -175,8 +175,11 @@ public class JobInit {
 			}
 		}
 		
+		//TODO 监控 /parox/task/job/jobname 的child
+		
 		for(String jobname: stopedJob){
 			TaskControlThread.removeRunningTask(jobname);
+			
 		}
 	}
 	

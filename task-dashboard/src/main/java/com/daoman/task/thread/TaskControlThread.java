@@ -19,6 +19,7 @@ import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.quartz.CronExpression;
 
+import com.daoman.task.config.AppConst;
 import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.service.job.JobDefinitionService;
 import com.daoman.task.service.job.JobStatusService;
@@ -169,7 +170,7 @@ public class TaskControlThread extends Thread {
 	}
 	
 	public static String getLockPath(String jobname, Long nextfiretime){
-		return PATH_ROOT+"/"+jobname+"/lock_"+nextfiretime;
+		return AppConst.JOB_ROOT+"/"+jobname+"/lock_"+nextfiretime;
 	}
 	
 	private boolean holdLock(String jobname, Long nextfiretime){
@@ -202,9 +203,9 @@ public class TaskControlThread extends Thread {
 					zk.create(getNextFireTimePath(task.getJobName()), nft.getBytes(), ZookeeperUtil.getInstance().getAcl(), CreateMode.EPHEMERAL);
 					LOG.debug("Successfully reset next fire time. job name is "+task.getJobName());
 				} catch (KeeperException e) {
-					LOG.error("Next fire time not reset. job name is "+task.getJobName(), e);
+					LOG.info("Next fire time not reset. job name is "+task.getJobName(), e);
 				} catch (InterruptedException e) {
-					LOG.error("Next fire time not reset. job name is "+task.getJobName(), e);
+					LOG.info("Next fire time not reset. job name is "+task.getJobName(), e);
 				}
 				
 			}
@@ -214,15 +215,14 @@ public class TaskControlThread extends Thread {
 		}
 	}
 	
-	private String getNextFireTimePath(String jobname){
-		return PATH_ROOT+"/"+jobname+"/next_fire_time";
+	public static String getNextFireTimePath(String jobname){
+		return AppConst.JOB_ROOT+"/"+jobname+"/next_fire_time";
 	}
 	
-	static final String PATH_ROOT="/parox/task/job";
+//	static final String PATH_ROOT="/parox/task/job";
 	
 	private Long getNextFireTime(String jobname){
-		
-		
+
 		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
 		try {
 			
@@ -231,7 +231,7 @@ public class TaskControlThread extends Thread {
 			
 			return nextFireTime;
 		} catch (KeeperException e1) {
-			LOG.error("Can not get next_fire_time from zookeeper, job name is "+jobname, e1);
+			LOG.info("Can not get next_fire_time from zookeeper, job name is "+jobname, e1);
 		} catch (InterruptedException e1) {
 			LOG.error("Can not get next_fire_time from zookeeper, job name is "+jobname, e1);
 		}
@@ -269,7 +269,12 @@ public class TaskControlThread extends Thread {
 	 */
 	synchronized public static boolean removeRunningTask(String taskName) {
 		// 从runningTask中移除任务
-		if(runningTasks.get(taskName)!=null){
+		JobDefinition definition = runningTasks.get(taskName);
+		if(definition!=null){
+			if(JobDefinition.RUNNING_SINGLE.equalsIgnoreCase(definition.getSingleRunning())){
+				//TODO 移除next_fire_time
+				ZookeeperUtil.getInstance().delete(getNextFireTimePath(taskName), -1);
+			}
 			runningTasks.remove(taskName);
 		}
 		return false;

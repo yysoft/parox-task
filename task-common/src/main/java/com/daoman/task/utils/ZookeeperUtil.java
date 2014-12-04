@@ -12,12 +12,15 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
+import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
 
 /**
@@ -114,4 +117,62 @@ public class ZookeeperUtil {
 		
 		return acls;
 	}
+	
+	public Stat exist(String path, boolean watch){
+		ZooKeeper zk = getZKClient();
+		try {
+			Stat stat = zk.exists(path, watch);
+			return stat;
+		} catch (KeeperException e) {
+			LOG.info("Node is not exist. node is "+path, e);
+		} catch (InterruptedException e) {
+			LOG.error("Failure check exist.",e);
+		}
+		return null;
+	}
+	
+	public Stat exist(String path, Watcher watcher){
+		ZooKeeper zk = getZKClient();
+		try {
+			Stat stat = zk.exists(path, watcher);
+			return stat;
+		} catch (KeeperException e) {
+			LOG.info("Node is not exist. node is "+path, e);
+		} catch (InterruptedException e) {
+			LOG.error("Failure check exist.",e);
+		}
+		return null;
+	}
+	
+	public String create(String path, String data, CreateMode createMode){
+		
+		ZooKeeper zk = getZKClient();
+		try {
+			String createdPath = zk.create(path, data.getBytes(), getAcl(),
+					createMode);
+			return createdPath;
+		} catch (KeeperException e) {
+			LOG.info("Can not create Node: "+path, e);
+		} catch (InterruptedException e) {
+			LOG.error("Failure create Node:"+path, e);
+		}
+		
+		return null;
+	}
+	
+	public boolean delete(String path, int version){
+		ZooKeeper zk = getZKClient();
+		try {
+			zk.delete(path, -1);
+			return true;
+		} catch (InterruptedException e) {
+			LOG.error("Failure delete node", e);
+		} catch (KeeperException e) {
+			LOG.info("The node is not deleted. node is "+path, e);
+		}
+		
+		return false;
+	}
+	
+	
 }

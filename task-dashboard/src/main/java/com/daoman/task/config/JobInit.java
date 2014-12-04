@@ -17,7 +17,6 @@ import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
-import org.apache.zookeeper.data.Stat;
 import org.springframework.stereotype.Component;
 
 import com.daoman.task.domain.job.JobDefinition;
@@ -53,14 +52,50 @@ public class JobInit {
 		taskThread.setJobStatusService(jobStatusService);
 		taskThread.start();
 		
-		//初始化任务
-		
-		
 		//设置监听
 		List<String> initJobList = watchChild(true);
 		
 		//获取 job definition
 		initFromDB(initJobList);
+		
+	}
+	
+	private void initFromDB(List<String> nodeList){
+		
+		List<JobDefinition> jobList = jobDefinitionService.queryAll(true);
+		
+		List<String> initedList = Lists.newArrayList();
+		
+		ZookeeperUtil zu = ZookeeperUtil.getInstance();
+		for(JobDefinition definition: jobList){
+			
+			if(JobDefinition.RUNNING_MULITY.equalsIgnoreCase(definition.getSingleRunning())){
+				TaskControlThread.addRunTask(definition);
+				continue;
+			}
+			
+			//通过 getData 判断是否存在
+			String path= AppConst.getJobListPath(definition.getJobName());
+			if(zu.exist(path, false)==null){
+				zu.create(path, "1", CreateMode.PERSISTENT);
+			}
+			
+			if(zu.exist(AppConst.getJobPath(definition.getJobName()), false)==null){
+				zu.create(AppConst.getJobPath(definition.getJobName()), "1",
+						CreateMode.PERSISTENT);
+			}
+			
+			TaskControlThread.addRunTask(definition);
+			initedList.add(definition.getJobName());
+		}
+		
+		for(String jobname: initedList){
+			nodeList.remove(jobname);
+		}
+		
+		for(String jobname: nodeList){
+			zu.delete(AppConst.getJobListPath(jobname), -1);
+		}
 		
 	}
 	
@@ -79,79 +114,12 @@ public class JobInit {
 		return jobListWatch;
 	}
 	
-	final static String JOB_ROOT="/parox/task/job_list";
-	
-	private void initFromDB(List<String> nodeList){
-		
-		List<JobDefinition> jobList = jobDefinitionService.queryAll(true);
-		
-		List<String> initedList = Lists.newArrayList();
-		
-		for(JobDefinition definition: jobList){
-			//通过 getData 判断是否存在
-			
-			if(jobExist(definition.getJobName())==null){
-				createNode(definition.getJobName());
-			}
-			//TODO 判断/parox/task/job/jobname 是否存在，不存在的情况下要创建
-			
-			TaskControlThread.addRunTask(definition);
-			initedList.add(definition.getJobName());
-		}
-		
-		for(String jobname: initedList){
-			nodeList.remove(jobname);
-		}
-		
-		for(String jobname: nodeList){
-			deleteNode(jobname);
-		}
-		
-	}
-	
-	private Stat jobExist(String jobname){
-		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
-		try {
-			Stat stat = zk.exists(JOB_ROOT+"/"+jobname, false);
-			return stat;
-		} catch (KeeperException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private String createNode(String jobname){
-		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
-		try {
-			String path = zk.create(JOB_ROOT+"/"+jobname, "1".getBytes(), ZookeeperUtil.getInstance().getAcl(), CreateMode.PERSISTENT);
-			return path;
-		} catch (KeeperException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private void deleteNode(String jobname){
-		ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
-		try {
-			zk.delete(JOB_ROOT+"/"+jobname, -1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (KeeperException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private List<String> watchChild(boolean watchOnly){
 		
 		try {
 			
 			ZooKeeper zk = ZookeeperUtil.getInstance().getZKClient();
-			List<String> childList = zk.getChildren("/parox/task/job_list", getWatcher());
+			List<String> childList = zk.getChildren(AppConst.JOB_LIST_ROOT, getWatcher());
 			
 			if(!watchOnly){
 				stopTask();
@@ -160,26 +128,28 @@ public class JobInit {
 			
 			return childList;
 		} catch (KeeperException e) {
-			
+			LOG.error("Can not get JOB LIST ROOT.", e);
 		} catch (InterruptedException e) {
-			
+			LOG.error("Failure get and watch JOB LIST ROOT", e);
 		}
 		return null;
 	}
 	
 	private void stopTask(){
 		List<String> stopedJob = Lists.newArrayList();
+		
+		ZookeeperUtil zu = ZookeeperUtil.getInstance();
 		for (String jobname : TaskControlThread.runningTasks.keySet()) {
-			if(jobExist(jobname)==null){
+			if(zu.exist(AppConst.getJobListPath(jobname), false)==null){
 				stopedJob.add(jobname);
 			}
 		}
 		
-		//TODO 监控 /parox/task/job/jobname 的child
-		
 		for(String jobname: stopedJob){
 			TaskControlThread.removeRunningTask(jobname);
 			
+			//XXX 最好删除 /parox/task/job/taskname 节点，
+			//通过watch机制检测所有lock和next_fire_time均已经删除的情况下
 		}
 	}
 	
@@ -190,7 +160,7 @@ public class JobInit {
 			}
 			JobDefinition definition = jobDefinitionService.queryOne(jobname);
 			if(definition!=null){
-				//TODO 同步JAR包
+				//TODO 检查并同步JAR包(一台机器跑无所谓)
 				TaskControlThread.addRunTask(definition);
 			}
 		}

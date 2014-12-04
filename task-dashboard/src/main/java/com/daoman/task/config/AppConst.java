@@ -24,4 +24,14 @@ public class AppConst {
 	 */
 	public final static String DATE_FORMAT_TIME="HH:mm:ss";
 	
+	public final static String JOB_LIST_ROOT="/parox/task/job_list";
+	public static String getJobListPath(String jobname){
+		return JOB_LIST_ROOT+"/"+jobname;
+	}
+	
+	public final static String JOB_ROOT="/parox/task/job";
+	public static String getJobPath(String jobname){
+		return JOB_ROOT+"/"+jobname;
+	}
+	
 }

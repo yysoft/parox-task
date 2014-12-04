@@ -25,6 +25,8 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	
 	@Resource
 	private JobDefinitionMapper jobDefinitionMapper;
+	
+	final static int DEFAULT_PAGE_SIZE=50;
 
 	@Override
 	public List<JobDefinition> queryAll(Boolean isInUse) {
@@ -79,8 +81,14 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	@Override
 	public Pager<JobDefinition> pageDefault(JobDefinitionCond cond,
 			Pager<JobDefinition> page) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(page.getLimit()==0){
+			page.setLimit(DEFAULT_PAGE_SIZE);
+		}
+		
+		page.setRecords(jobDefinitionMapper.pageDefault(cond, page));
+		page.setTotals(jobDefinitionMapper.pageDefaultCount(cond));
+		return page;
 	}
 	
 }

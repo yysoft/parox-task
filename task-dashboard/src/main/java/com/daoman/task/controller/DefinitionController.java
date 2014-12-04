@@ -45,12 +45,21 @@ public class DefinitionController extends BaseController {
 	}
 	
 	@RequestMapping
+	public ModelAndView edit(HttpServletRequest request, ModelMap model,
+			Integer id){
+		
+		model.put("id", id);
+		
+		return null;
+	}
+	
+	@RequestMapping
 	@ResponseBody
 	public Pager<JobDefinition> page(HttpServletRequest request,
 			JobDefinitionCond cond, Pager<JobDefinition> page){
 		
 		//TODO 分页获取 job definition
-		page.setRecords(new ArrayList<JobDefinition>());
+		page = jobDefinitionService.pageDefault(cond, page);
 		
 		return page;
 	}

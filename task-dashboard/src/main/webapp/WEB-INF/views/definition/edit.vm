@@ -1,0 +1,72 @@
+#globalHeader("definition")
+
+<div class="container">
+	<div class="row">
+		<div class="table-responsive" id="definition_list">
+			
+			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition/create.do')" method="post" role="form">
+			<div class="panel panel-default" id="product">
+				<div class="panel-heading">
+					#springMessage("tip.definition.panel.title")
+				</div>
+				
+				<div class="panel-body">
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.name")：</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="jobName" placeholder="#springMessage('ph.definition.name')" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.classname")：</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="jobClassName" placeholder="#springMessage('ph.definition.classname')" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.cron")：</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="cron" placeholder="#springMessage('ph.definition.cron')" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.single.running")：</label>
+						<div class="col-sm-10">
+								<label >
+									<input type="radio" name="singleRunning" value="SINGLE" checked="checked" /> SINGLE<small>(单台服务器运行)</small>
+								</label>
+								<label >
+									<input type="radio" name="singleRunning" value="MULITY" /> MULITY<small>(多服务器同时运行)</small>
+								</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.classpath")：</label>
+						<div class="col-sm-10">
+							<input type="file" name="uploadfile" />
+							<p class="help-block">#springMessage("ph.definition.classpath")</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label  class="col-sm-2 control-label">#springMessage("lb.definition.description")：</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" name="description" rows="4" placeholder="#springMessage('ph.definition.description')"></textarea>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10" id="editor">
+							<button id="definition_submit_btn" type="submit" class="btn btn-primary" data-loading-text="#springMessage('tip.loading')">#springMessage('btn.submit')</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			</form>
+			
+		</div>
+	</div>
+</div>
+	
+<script type="text/javascript">
+	
+</script>

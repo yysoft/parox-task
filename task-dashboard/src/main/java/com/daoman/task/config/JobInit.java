@@ -68,6 +68,12 @@ public class JobInit {
 		
 		ZookeeperUtil zu = ZookeeperUtil.getInstance();
 		for(JobDefinition definition: jobList){
+			
+			if(JobDefinition.RUNNING_MULITY.equalsIgnoreCase(definition.getSingleRunning())){
+				TaskControlThread.addRunTask(definition);
+				continue;
+			}
+			
 			//通过 getData 判断是否存在
 			String path= AppConst.getJobListPath(definition.getJobName());
 			if(zu.exist(path, false)==null){
@@ -167,11 +173,11 @@ public class JobInit {
 		
 		YYConnPool.getInstance().destoryConnectionPools();
 		
-		try {
-			ZookeeperUtil.getInstance().getZKClient().close();
-		} catch (InterruptedException e) {
-			LOG.error("Error occurred while close zookeeper client.", e);
-		}
+//		try {
+//			ZookeeperUtil.getInstance().getZKClient().close();
+//		} catch (InterruptedException e) {
+//			LOG.error("Error occurred while close zookeeper client.", e);
+//		}
 	}
 	
 }

@@ -37,8 +37,11 @@ public class JobStatusServiceImpl implements JobStatusService {
 	@Override
 	public Pager<JobStatus> pageDefault(JobStatusCond cond,
 			Pager<JobStatus> page) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		page.setRecords(jobStatusMapper.pageDefault(cond, page));
+		page.setTotals(jobStatusMapper.pageDefaultCount(cond));
+		
+		return page;
 	}
 
 }

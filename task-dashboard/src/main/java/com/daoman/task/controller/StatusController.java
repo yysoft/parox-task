@@ -3,8 +3,6 @@
  */
 package com.daoman.task.controller;
 
-import java.util.ArrayList;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.daoman.task.domain.Pager;
 import com.daoman.task.domain.job.JobDefinition;
+import com.daoman.task.domain.job.JobStatus;
 import com.daoman.task.domain.job.JobStatusCond;
 import com.daoman.task.service.job.JobStatusService;
 
@@ -36,11 +35,11 @@ public class StatusController extends BaseController {
 	
 	@RequestMapping
 	@ResponseBody
-	public Pager<JobDefinition> page(HttpServletRequest request, 
-			JobStatusCond cond, Pager<JobDefinition> page){
+	public Pager<JobStatus> page(HttpServletRequest request, 
+			JobStatusCond cond, Pager<JobStatus> page){
 		
 		//TODO 分页获取 job status
-		page.setRecords(new ArrayList<JobDefinition>());
+		page = jobStatusService.pageDefault(cond, page);
 		
 		return page;
 	}

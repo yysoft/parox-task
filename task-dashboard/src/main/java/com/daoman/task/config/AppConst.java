@@ -19,6 +19,11 @@ public class AppConst {
 	 * 仅日期格式：yyyy-MM-dd
 	 */
 	public final static String DATE_FORMAT_DATE="yyyy-MM-dd";
+	
+	public final static int DEFAULT_PAGE_SIZE_100 = 100;
+	
+	public final static int DEFAULT_PAGE_SIZE_50 = 50;
+	
 	/**
 	 * 仅时间格式：HH:mm:ss
 	 */

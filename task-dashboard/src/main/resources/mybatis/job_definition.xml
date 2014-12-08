@@ -9,7 +9,6 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		delete from job_definition where id = #{id}
 	</delete>
 	
-	
 	<insert id="insert" parameterType="com.daoman.task.domain.job.JobDefinition" keyProperty="id" >
 		insert into job_definition (job_name,job_group, job_classpath, job_class_name,
 			cron, is_in_use, start_time, end_time, description,gmt_created,gmt_modified, single_running)
@@ -73,41 +72,74 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="update" parameterType="com.daoman.task.domain.job.JobDefinition" >
-		update job_definition
-		<set>
-			gmt_modified = now()
+		update job_definition set
 			<if test="jobName != null">
-				job_name = #{jobName}
+				job_name = #{jobName},
 			</if>
 			<if test="jobGroup != null">
-				job_group = #{jobGroup}
+				job_group = #{jobGroup},
 			</if>
 			<if test="jobClasspath != null">
-				job_classpath = #{jobClasspath}
+				job_classpath = #{jobClasspath},
 			</if>
 			<if test="jobClassName != null">
-				job_class_name = #{jobClassName}
+				job_class_name = #{jobClassName},
 			</if>
 			<if test="description != null">
-				description = #{description}
+				description = #{description},
 			</if>
 			<if test="cron != null">
-				cron = #{cron}
-			</if>
-			<if test="inUse != null">
-				is_in_use = #{inUse}
+				cron = #{cron},
 			</if>
 			<if test="startTime != null">
-				start_time = #{startTime}
+				start_time = #{startTime},
 			</if>
 			<if test="endTime != null">
-				end_time = #{endTime}
+				end_time = #{endTime},
 			</if>
 			<if test="singleRunning != null">
-				single_running = #{singleRunning}
+				single_running = #{singleRunning},
 			</if>
-		</set>
+			gmt_modified = now()
 		where id = #{id}
 	</update>
+	
+	<sql id="defaultCond" >
+		<where >
+			<if test="cond.isInUse != null">
+				and jd.is_in_use = #{isInUse}
+			</if>
+			<if test="cond.jobName != null">
+				and jd.job_name = #{jobName}
+			</if>
+			<if test="cond.jobGroup != null">
+				and jd.job_group = #{jobGroup}
+			</if>
+			<if test="cond.jobNameMatchBefore != null">
+				and jd.job_name like concat(#{jobNameMatchBefore}, '%') 
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="pageDefault"  resultType="com.daoman.task.domain.job.JobDefinition">
+		select
+		<include refid="fullColumn" />
+		from `job_definition` jd
+		
+		<include refid="defaultCond" />
+		
+		<if test="page.sort != null and page.sort != '' ">
+			order by ${page.sort} ${page.dir}
+		</if>
+		limit #{page.start}, #{page.limit}
+	</select>
+	
+	<select id="pageDefaultCount"  resultType="java.lang.Integer" >
+		select count(1) as c
+		from `job_definition` jd
+		<include refid="defaultCond" />
+	</select>
+	
 </mapper>
 

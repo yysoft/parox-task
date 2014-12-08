@@ -1,6 +1,3 @@
-/**
- * Product 模块相关的操作
- * */
 define(		["jquery","template","utils/table/pager"],
 	function( jQuery,  template,   pg){
 	

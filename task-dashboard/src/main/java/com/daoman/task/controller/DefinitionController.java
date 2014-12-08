@@ -81,14 +81,15 @@ public class DefinitionController extends BaseController {
 	public JobDefinition queryOne(HttpServletRequest request, Integer id){
 		//TODO 获取单个任务信息
 		
-		return jobDefinitionService.queryOne(id);
+		JobDefinition definition = jobDefinitionService.queryOne(id);
+		return definition;
 	}
 	
 	@RequestMapping
 	@ResponseBody
 	public JobDefinition update(HttpServletRequest request, JobDefinition definition){
 		//TODO 更新任务信息（不包含JAR包上传更新，不包含启动任务）
-		jobDefinitionService.update(definition);
+		Integer impact = jobDefinitionService.update(definition);
 		return definition;
 	}
 	

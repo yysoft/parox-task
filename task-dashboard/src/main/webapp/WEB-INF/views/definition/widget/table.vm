@@ -5,7 +5,6 @@
 		</div>
 	</div>
 </div>
-
 <script type="text/javascript">
 	require([	  "jquery","template","messenger", "job/definition", "utils/table"],
 		function(jQuery,  template,   messenger,    definition,            table){
@@ -33,8 +32,8 @@
 		<thead>
 		<tr class="active">
 			<th class="text-center" width="10">#</th>
-			<th class="text-center" width="80">#springMessage('tb.definition.name')</th>
-			<th class="text-center" width="80">#springMessage('tb.definition.cron')</th>
+			<th class="text-center" >#springMessage('tb.definition.name')</th>
+			<th class="text-center" width="100">#springMessage('tb.definition.cron')</th>
 			<th class="text-center" >#springMessage('tb.definition.classpath')</th>
 			<th class="text-center">#springMessage('tb.definition.classname')</th>
 			<th class="text-center" width="80">#springMessage('tb.definition.single.running')</th>
@@ -42,16 +41,16 @@
 		</tr>
 		</thead>
 		<tbody>
-		{{each records as dto i}}
+		{{each records as definition i}}
 		<tr >
 			<td >{{i + 1}}</td>
-			<td >{{dto.definition.jobName}}</td>
-			<td >{{dto.definition.cron}}</td>
-			<td >{{dto.definition.jobClasspath}}</td>
-			<td >{{dto.definition.jobClassName}}</td>
-			<td >{{dto.running}}</td>
+			<td ><a href="#springUrl('/definition/edit.do')?id={{definition.id}}" target="_blank">{{definition.jobName}}</a></td>
+			<td >{{definition.cron}}</td>
+			<td >{{definition.jobClasspath}}</td>
+			<td >{{definition.jobClassName}}</td>
+			<td >{{definition.singleRunning}}</td>
 			<td >
-			<button type="button" class="btn btn-danger btn-xs act-delete" model-definition-id="{{dto.definition.id}}">
+			<button type="button" class="btn btn-danger btn-xs act-delete" model-definition-id="{{definition.id}}">
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
 			</td>

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.daoman.task.config.AppConst;
 import com.daoman.task.domain.Pager;
 import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.domain.job.JobDefinitionCond;
@@ -26,8 +27,6 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	@Resource
 	private JobDefinitionMapper jobDefinitionMapper;
 	
-	final static int DEFAULT_PAGE_SIZE=50;
-
 	@Override
 	public List<JobDefinition> queryAll(Boolean isInUse) {
 		
@@ -41,8 +40,16 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 
 	@Override
 	public JobDefinition save(JobDefinition definition) {
-		//需要初始化一些必要的参数信息 FIXME isInUse? jobGroup? endTime?
+		definition = defaultDefinition(definition);
 		return jobDefinitionMapper.insert(definition);
+	}
+	
+	private JobDefinition defaultDefinition(JobDefinition definition){
+		
+		definition.setIsInUse(JobDefinition.INUSE_FALSE);
+		definition.setJobGroup(JobDefinition.GROUP_TASK);
+		
+		return definition;
 	}
 
 	@Override
@@ -68,7 +75,7 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 
 	@Override
 	public Integer update(JobDefinition definition) {
-		//is_in_use 不在更新范围内
+		
 		return jobDefinitionMapper.update(definition);
 	}
 
@@ -82,11 +89,12 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 			Pager<JobDefinition> page) {
 		
 		if(page.getLimit()==0){
-			page.setLimit(DEFAULT_PAGE_SIZE);
+			page.setLimit(AppConst.DEFAULT_PAGE_SIZE_50);
 		}
 		
 		page.setRecords(jobDefinitionMapper.pageDefault(cond, page));
 		page.setTotals(jobDefinitionMapper.pageDefaultCount(cond));
+		
 		return page;
 	}
 	

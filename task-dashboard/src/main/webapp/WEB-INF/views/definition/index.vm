@@ -1,3 +1,4 @@
 #globalHeader("definition")
 
+#parse("/definition/widget/searchBar.vm")
 #parse("/definition/widget/table.vm")

@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.daoman.task.config.AppConst;
 import com.daoman.task.domain.Pager;
 import com.daoman.task.domain.job.JobStatus;
 import com.daoman.task.domain.job.JobStatusCond;
@@ -37,6 +38,10 @@ public class JobStatusServiceImpl implements JobStatusService {
 	@Override
 	public Pager<JobStatus> pageDefault(JobStatusCond cond,
 			Pager<JobStatus> page) {
+		
+		if(page.getLimit()==0){
+			page.setLimit(AppConst.DEFAULT_PAGE_SIZE_100);
+		}
 		
 		page.setRecords(jobStatusMapper.pageDefault(cond, page));
 		page.setTotals(jobStatusMapper.pageDefaultCount(cond));

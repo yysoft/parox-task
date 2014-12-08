@@ -13,6 +13,8 @@ public class JobDefinitionCond implements Serializable{
 	private String jobGroup;
 	private String jobClassName;
 	private Integer isInUse; //停用0启用1
+	private String jobNameMatchBefore;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -43,7 +45,12 @@ public class JobDefinitionCond implements Serializable{
 	public void setIsInUse(Integer isInUse) {
 		this.isInUse = isInUse;
 	}
-	
+	public String getJobNameMatchBefore() {
+		return jobNameMatchBefore;
+	}
+	public void setJobNameMatchBefore(String jobNameMatchBefore) {
+		this.jobNameMatchBefore = jobNameMatchBefore;
+	}
 	
 }
 

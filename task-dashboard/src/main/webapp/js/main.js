@@ -10,6 +10,7 @@ console.log('Global Config: Locale-> ',LOCALE)
 //	}
 //});
 require.config({
+	urlArgs: "v=" + (new Date()).getTime(),
 	baseUrl:CONTEXT_PATH,
 	paths:{
 		//基础JS库
@@ -27,6 +28,7 @@ require.config({
 		"tagsinput":"plugin/bootstrap-tagsinput/bootstrap-tagsinput.min",
 		"switch":"plugin/bootstrap-switch/js/bootstrap-switch.min",
 		"jqValidation":"plugin/jquery.extention/jqBootstrapValidation",
+		"validator":"plugin/bootstrap-validator/dist/validator.min",
 		"typeahead":"plugin/typeahead/typeahead.jquery.min",
 		"hogan":"plugin/hogan/hogan-2.0.0.min",
 		"messenger":"plugin/messenger/build/js/messenger.min",

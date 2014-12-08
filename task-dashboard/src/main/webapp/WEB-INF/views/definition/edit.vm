@@ -4,7 +4,8 @@
 	<div class="row">
 		<div class="table-responsive" id="definition_list">
 			
-			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition/create.do')" method="post" role="form">
+			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition/create.do')" method="post" role="form" >
+				<input type="hidden" name="id" value="" />
 			<div class="panel panel-default" id="product">
 				<div class="panel-heading">
 					#springMessage("tip.definition.panel.title")
@@ -14,7 +15,7 @@
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.name")：</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" name="jobName" placeholder="#springMessage('ph.definition.name')" required />
+							<input type="text" class="form-control" name="jobName" placeholder="#springMessage('ph.definition.name')" required/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -33,17 +34,17 @@
 						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.single.running")：</label>
 						<div class="col-sm-10">
 								<label >
-									<input type="radio" name="singleRunning" value="SINGLE" checked="checked" /> SINGLE<small>(单台服务器运行)</small>
+									<input type="radio" name="singleRunning" value="SINGLE" checked="checked"  /> SINGLE
 								</label>
 								<label >
-									<input type="radio" name="singleRunning" value="MULITY" /> MULITY<small>(多服务器同时运行)</small>
+									<input type="radio" name="singleRunning" value="MULITY" /> MULITY
 								</label>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.classpath")：</label>
 						<div class="col-sm-10">
-							<input type="file" name="uploadfile" />
+							<input type="file" name="uploadfile" #if("$!{id}" =="" ) required #end/>
 							<p class="help-block">#springMessage("ph.definition.classpath")</p>
 						</div>
 					</div>
@@ -68,5 +69,23 @@
 </div>
 	
 <script type="text/javascript">
-	
+	require([	  "jquery","template","job/definition", "validator"],
+		function(jQuery,  template,   definition,           validator){
+			
+			jQuery("#definition_form").validator();
+			
+			definition.form.setUrl("#springUrl('/definition/create.do')");
+			
+			#if("$!{id}" !="")
+			definition.form.setUrl("#springUrl('/definition/update.do')");
+			definition.form.fillForm("#springUrl('/definition/queryOne.do')",{id:"$!{id}"}, "definition_form");
+			#end
+			
+			jQuery("#definition_form").submit(function(){
+				definition.form.save($(this));
+				return false;
+			});
+			
+		}
+	);
 </script>

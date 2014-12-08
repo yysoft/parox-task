@@ -66,5 +66,53 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where id=#{id}
 	</update>
 	
+	<sql id="fullColumn">
+		js.`id`,
+		js.`job_name` as jobName,
+		js.`gmt_basetime` as gmtBasetime,
+		js.`result`,
+		js.`runtime`,
+		js.`gmt_trigger` as gmtTrigger,
+		js.`error_msg` as errorMsg,
+		js.`category`,
+		js.`num_retry` as numRetry,
+		js.`gmt_created` as gmtCreated,
+		js.`gmt_modified` as gmtModified,
+		js.`node_key` as nodeKey
+	</sql>
+	
+	<sql id="defaultCond" >
+		<where >
+			<if test="cond.result != null">
+				and js.result = #{result}
+			</if>
+			<if test="cond.jobName != null">
+				and js.job_name = #{jobName}
+			</if>
+			<if test="cond.category != null">
+				and js.category = #{category}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="pageDefault"  resultType="com.daoman.task.domain.job.JobStatus">
+		select
+		<include refid="fullColumn" />
+		from `job_status` js
+		
+		<include refid="defaultCond" />
+		
+		<if test="page.sort != null and page.sort != '' ">
+			order by ${page.sort} ${page.dir}
+		</if>
+		limit #{page.start}, #{page.limit}
+	</select>
+	
+	<select id="pageDefaultCount"  resultType="java.lang.Integer" >
+		select count(1) as c
+		from `job_status` js
+		<include refid="defaultCond" />
+	</select>
+	
 </mapper>
 

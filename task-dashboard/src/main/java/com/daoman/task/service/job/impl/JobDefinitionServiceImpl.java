@@ -39,18 +39,20 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 		return jobDefinitionMapper.queryAll(inuse);
 	}
 
-
 	@Override
 	public JobDefinition save(JobDefinition definition) {
-		// TODO Auto-generated method stub
-		//需要初始化一些必要的参数信息 //FIXME isInUse? jobGroup? endTime?
+		//需要初始化一些必要的参数信息 FIXME isInUse? jobGroup? endTime?
 		return jobDefinitionMapper.insert(definition);
 	}
 
 	@Override
 	public JobDefinition queryOne(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		if(id == null || id.intValue() == 0){
+			return null;
+		}
+		JobDefinitionCond cond = new JobDefinitionCond();
+		cond.setId(id);
+		return jobDefinitionMapper.queryOne(cond);
 	}
 
 	@Override
@@ -66,17 +68,14 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 
 	@Override
 	public Integer update(JobDefinition definition) {
-		// TODO Auto-generated method stub
 		//is_in_use 不在更新范围内
 		return jobDefinitionMapper.update(definition);
 	}
 
 	@Override
 	public Integer remove(Integer id) {
-		// TODO Auto-generated method stub
 		return jobDefinitionMapper.delete(id);
 	}
-
 
 	@Override
 	public Pager<JobDefinition> pageDefault(JobDefinitionCond cond,

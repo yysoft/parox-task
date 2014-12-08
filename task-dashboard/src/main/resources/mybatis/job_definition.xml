@@ -72,5 +72,42 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		limit 1
 	</select>
 	
+	<update id="update" parameterType="com.daoman.task.domain.job.JobDefinition" >
+		update job_definition
+		<set>
+			gmt_modified = now()
+			<if test="jobName != null">
+				job_name = #{jobName}
+			</if>
+			<if test="jobGroup != null">
+				job_group = #{jobGroup}
+			</if>
+			<if test="jobClasspath != null">
+				job_classpath = #{jobClasspath}
+			</if>
+			<if test="jobClassName != null">
+				job_class_name = #{jobClassName}
+			</if>
+			<if test="description != null">
+				description = #{description}
+			</if>
+			<if test="cron != null">
+				cron = #{cron}
+			</if>
+			<if test="inUse != null">
+				is_in_use = #{inUse}
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime}
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime}
+			</if>
+			<if test="singleRunning != null">
+				single_running = #{singleRunning}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
 </mapper>
 

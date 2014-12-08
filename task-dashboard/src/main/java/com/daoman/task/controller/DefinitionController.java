@@ -3,7 +3,6 @@
  */
 package com.daoman.task.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -70,10 +69,11 @@ public class DefinitionController extends BaseController {
 		//TODO 创建任务
 		
 		//以下为上传JAR包的示例代码（file field name:uploadfile）
-//		String uploadedFile = MvcUpload.localUpload(request, UPLOAD_ROOT, null);
+		String uploadedFile = MvcUpload.localUpload(request, UPLOAD_ROOT, null);
 		//如果上传成功，uploadedFile 为上传成功后的文件路径
-		
-		return null;
+		definition.setJobClasspath(uploadedFile);
+		jobDefinitionService.save(definition);
+		return definition;
 	}
 	
 	@RequestMapping
@@ -81,14 +81,15 @@ public class DefinitionController extends BaseController {
 	public JobDefinition queryOne(HttpServletRequest request, Integer id){
 		//TODO 获取单个任务信息
 		
-		return null;
+		return jobDefinitionService.queryOne(id);
 	}
 	
 	@RequestMapping
 	@ResponseBody
 	public JobDefinition update(HttpServletRequest request, JobDefinition definition){
 		//TODO 更新任务信息（不包含JAR包上传更新，不包含启动任务）
-		return null;
+		jobDefinitionService.update(definition);
+		return definition;
 	}
 	
 	@RequestMapping
@@ -97,7 +98,8 @@ public class DefinitionController extends BaseController {
 		//TODO 删除任务
 		//确认任务已从各个节点全部移除（结合停止功能实现）
 		//执行删除
-		return null;
+		Integer impact = jobDefinitionService.remove(id);
+		return ajaxResult((impact!=null && impact.intValue()>0)?true:false, null);
 	}
 	
 	@RequestMapping

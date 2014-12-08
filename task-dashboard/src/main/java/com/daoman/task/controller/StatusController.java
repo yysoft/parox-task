@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.daoman.task.domain.Pager;
-import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.domain.job.JobStatus;
 import com.daoman.task.domain.job.JobStatusCond;
 import com.daoman.task.service.job.JobStatusService;

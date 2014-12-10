@@ -417,7 +417,7 @@
 			<id>production</id>
 			<properties>
 				<package.environment>production</package.environment>
-                <jdbc.location>file:/usr/tools/config/db-parox-task-dashboard.properties</jdbc.location>
+                <jdbc.location>file:/opt/config/db/db-parox-task-dashboard.properties</jdbc.location>
 			</properties>
 		</profile>
 		<profile>

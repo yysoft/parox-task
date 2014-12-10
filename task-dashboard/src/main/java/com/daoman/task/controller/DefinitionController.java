@@ -170,8 +170,6 @@ public class DefinitionController extends BaseController {
 	@ResponseBody
 	public Map<String, Object> uploadjar(HttpServletRequest request) {
 		
-		//TODO 单独上传一个JAR包
-		
 		Map<String, Object> result = Maps.newHashMap();
 		String uploadedFile = MvcUpload.localUpload(request, UPLOAD_ROOT, null);
 		if (!Strings.isNullOrEmpty(uploadedFile)) {

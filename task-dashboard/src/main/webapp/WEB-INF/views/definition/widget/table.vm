@@ -37,20 +37,39 @@
 			<th class="text-center" >#springMessage('tb.definition.classpath')</th>
 			<th class="text-center">#springMessage('tb.definition.classname')</th>
 			<th class="text-center" width="80">#springMessage('tb.definition.single.running')</th>
-            <th class="text-center" width="10"></th>
+            <th class="text-center" width="70"></th>
 		</tr>
 		</thead>
 		<tbody>
 		{{each records as definition i}}
 		<tr >
-			<td >{{i + 1}}</td>
-			<td ><a href="#springUrl('/definition/edit.do')?id={{definition.id}}" target="_blank">{{definition.jobName}}</a></td>
+			<td>
+				{{if definition.isInUse == 0}}
+				<span class="glyphicon glyphicon-stop text-danger" id="run-st-{{definition.id}}" ></span>
+				{{/if}}
+				{{if definition.isInUse == 1}}
+				<span class="glyphicon glyphicon-play text-success" id="run-st-{{definition.id}}" ></span>
+				{{/if}}
+			</td>
+			<td >
+				<a href="#springUrl('/definition/edit.do')?id={{definition.id}}" >{{definition.jobName}}</a>
+			</td>
 			<td >{{definition.cron}}</td>
 			<td >{{definition.jobClasspath}}</td>
 			<td >{{definition.jobClassName}}</td>
 			<td >{{definition.singleRunning}}</td>
 			<td >
-			<button type="button" class="btn btn-danger btn-xs act-delete" model-definition-id="{{definition.id}}">
+			{{if definition.isInUse == 0}}
+			<button type="button" class="btn btn-success btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
+				<span class="glyphicon glyphicon-play"></span>
+			</button>
+			{{/if}}
+			{{if definition.isInUse == 1}}
+			<button type="button" class="btn btn-warning btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
+				<span class="glyphicon glyphicon-stop"></span>
+			</button>
+			{{/if}}
+			<button type="button" class="btn btn-danger btn-xs act-delete" model-id="{{definition.id}}">
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
 			</td>

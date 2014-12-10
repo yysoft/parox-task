@@ -3,8 +3,11 @@
 <div class="container">
 	<div class="row">
 		<div class="table-responsive" id="definition_list">
-			
-			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition/create.do')" method="post" role="form" >
+			#set($action = "/create.do")
+			#if(${id})
+				#set($action = "/update.do")
+			#end
+			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition')$!{action}" method="post" role="form" enctype="multipart/form-data">
 				<input type="hidden" name="id" value="" />
 			<div class="panel panel-default" id="product">
 				<div class="panel-heading">
@@ -15,7 +18,7 @@
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.name")：</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" name="jobName" placeholder="#springMessage('ph.definition.name')" required/>
+							<input type="text" class="form-control" name="jobName" pattern="^([_A-z0-9\-])+$" placeholder="#springMessage('ph.definition.name')" required/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -28,6 +31,7 @@
 						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.cron")：</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" name="cron" placeholder="#springMessage('ph.definition.cron')" required />
+							<div class="help-block with-errors">#springMessage('ph.definition.cron')</div>
 						</div>
 					</div>
 					<div class="form-group">
@@ -74,17 +78,21 @@
 			
 			jQuery("#definition_form").validator();
 			
-			definition.form.setUrl("#springUrl('/definition/create.do')");
-			
 			#if("$!{id}" !="")
-			definition.form.setUrl("#springUrl('/definition/update.do')");
 			definition.form.fillForm("#springUrl('/definition/queryOne.do')",{id:"$!{id}"}, "definition_form");
 			#end
-			
-			jQuery("#definition_form").submit(function(){
-				definition.form.save($(this));
-				return false;
-			});
+
+			#if(${definition})
+				definition.form.fillBaseForm(${definition}, "definition_form");
+			#end
+
+			#if(${error})
+				Messenger().post({
+					message: "#springMessage('alert.save.failure')",
+					type: "error",
+					showCloseButton: true
+				});
+			#end
 			
 		}
 	);

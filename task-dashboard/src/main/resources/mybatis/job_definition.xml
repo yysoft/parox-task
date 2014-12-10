@@ -141,5 +141,12 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		<include refid="defaultCond" />
 	</select>
 	
+	<update id="updateIsInUse" >
+		update job_definition set 
+			is_in_use=#{isInUse},
+			gmt_modified=now()
+		where id=#{id}
+	</update>
+	
 </mapper>
 

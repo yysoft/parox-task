@@ -94,10 +94,11 @@ public class TaskControlThread extends Thread {
 				
 				JobDefinition task = runningTasks.get(jobname);
 				
-				if(JobDefinition.RUNNING_MULITY.equalsIgnoreCase(task.getSingleRunning())){
-					runTask(task, null);
-					continue ;
-				}
+				//XXX 需要处理RUNNING_MULITY的情况
+//				if(JobDefinition.RUNNING_MULITY.equalsIgnoreCase(task.getSingleRunning())){
+//					runTask(task, null);
+//					continue ;
+//				}
 				
 				Long nextFireTime = getNextFireTime(jobname);
 				

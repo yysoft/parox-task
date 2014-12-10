@@ -17,7 +17,7 @@ import com.daoman.task.domain.job.JobDefinitionCond;
  */
 public interface JobDefinitionMapper {
 
-	public JobDefinition insert(JobDefinition definition);
+	public Integer insert(JobDefinition definition);
 	
 	public Integer delete(Integer id);
 	
@@ -35,5 +35,7 @@ public interface JobDefinitionMapper {
 	public JobDefinition queryOne(JobDefinitionCond cond);
 	
 	public Integer update(JobDefinition definition);
+	
+	public Integer updateIsInUse(@Param("id")Integer id, @Param("isInUse")Integer isInUse);
 	
 }

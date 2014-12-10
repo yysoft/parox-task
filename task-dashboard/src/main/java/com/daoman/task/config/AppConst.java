@@ -39,4 +39,6 @@ public class AppConst {
 		return JOB_ROOT+"/"+jobname;
 	}
 	
+	public final static String ZKCONFIG_JAR_UPLOAD_ROOT="/parox/task/config/jar_upload_root";
+	public final static String ZKCONFIG_JAR_DOWNLOAD_URL="/parox/task/config/jar_download_url";
 }

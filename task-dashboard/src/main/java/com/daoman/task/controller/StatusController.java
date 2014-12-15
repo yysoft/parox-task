@@ -28,7 +28,11 @@ public class StatusController extends BaseController {
 	private JobStatusService jobStatusService;
 	
 	@RequestMapping
-	public ModelAndView index(HttpServletRequest request, ModelMap model){
+	public ModelAndView index(HttpServletRequest request, ModelMap model,
+			String jobName){
+		
+		model.put("jobName", jobName);
+		
 		return null;
 	}
 	
@@ -37,7 +41,6 @@ public class StatusController extends BaseController {
 	public Pager<JobStatus> page(HttpServletRequest request, 
 			JobStatusCond cond, Pager<JobStatus> page){
 		
-		//TODO 分页获取 job status
 		page = jobStatusService.pageDefault(cond, page);
 		
 		return page;

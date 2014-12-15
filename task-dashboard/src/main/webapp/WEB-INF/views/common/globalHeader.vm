@@ -20,7 +20,7 @@
 				<a href="#springUrl('/definition/index.do')">#springMessage("m.task.all")</a>
 			</li>
 			
-			<li #if(${menuIdx} == "log")class="active"#end>
+			<li #if(${menuIdx} == "status")class="active"#end>
 				<a href="#springUrl('/status/index.do')">#springMessage("m.task.log")</a>
 			</li>
 			

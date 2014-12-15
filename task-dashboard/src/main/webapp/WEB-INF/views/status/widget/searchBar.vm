@@ -1,0 +1,62 @@
+<div class="container">
+	<div class="row">
+		<nav class=" navbar navbar-default" >
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#product_search_form" >
+						<span class="sr-only"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">#springMessage("tip.brand.search")</a>
+				</div>
+				<div class="collapse navbar-collapse" id="definition_search_form">
+					
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+
+<script type="text/javascript">
+	require([	"jquery","template","job/definition"],
+		function(jQuery,  template, definition){
+			
+			var html=template("tpl_definition_search_form", {});
+			
+			jQuery("#definition_search_form").html(html);
+			
+			
+			/*
+			jQuery("#search_form").submit(function(fm){
+				product.search(jQuery("#search_form").serialize());
+				return false;
+			});
+			*/
+		}
+	);
+</script>
+
+<script id="tpl_definition_search_form" type="text/html">
+<form class="navbar-form navbar-left" role="search" action="#springUrl('/definition/index.do')" id="search_form">
+	
+	<div class="form-group">
+		<label class="sr-only" for="jobNameMatchBefore">#springMessage('lb.definition.name')</label>
+		<input type="text" class="form-control" name="jobNameMatchBefore" placeholder="#springMessage('ph.definition.name')" ／>
+	</div>
+	
+	<div  class="form-group">
+	<button type="submit" class="btn btn-primary">
+		<span class="glyphicon glyphicon-search"></span> #springMessage('btn.search')
+	</button>
+	
+	<a href="#springUrl('/definition/edit.do')" class="btn btn-default">
+		<span class="glyphicon glyphicon-plus"></span>
+	</a>
+	</div>
+	
+</form>
+</script>
+
+	

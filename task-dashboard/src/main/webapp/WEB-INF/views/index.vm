@@ -1,14 +1,79 @@
 #globalHeader("index")
 
 <div class="container">
+	
 	<div class="row">
 		<div class="col-md-12">
-			<h2>任务调度系统</h2>
+			<h2>#springMessage("global.sitename")</h2>
 		</div>
 	</div>
+	
+	<div class="row">
+		
+		<div class="col-md-3" >
+		<div class="panel panel-danger">
+			<div class="panel-heading">#springMessage("tip.definition.monitor.numQueue")</div>
+			<div class="panel-body">
+					<div class="text-center">
+						<h1 id="numQueue">0</h1>
+						<small>#springMessage("tip.definition.monitor.numQueue.max") 10</small>
+					</div>
+			</div>
+		</div>
+		</div>
+		
+		<div class="col-md-3" >
+		<div class="panel panel-info">
+			<div class="panel-heading">#springMessage("tip.definition.monitor.activityCount")</div>
+			<div class="panel-body">
+					<div class="text-center">
+						<h1 id="activityCount">0</h1>
+					</div>
+			</div>
+		</div>
+		</div>
+		
+		<div class="col-md-3" >
+		<div class="panel panel-primary">
+			<div class="panel-heading">#springMessage("tip.definition.monitor.numTask")</div>
+			<div class="panel-body">
+					<div class="text-center">
+						<h1 id="numTask">0</h1>
+					</div>
+			</div>
+		</div>
+		</div>
+		
+		<div class="col-md-3" >
+		<div class="panel panel-warning">
+			<div class="panel-heading">#springMessage("tip.definition.monitor.poolSize")</div>
+			<div class="panel-body">
+					<div class="text-center">
+						<h1 id="poolSize">0</h1>
+						<small>#springMessage("tip.definition.monitor.numQueue.max") 5</small>
+					</div>
+			</div>
+		</div>
+		</div>
+		
+	</div>
+	
 </div>
 
-###loadScript([
-##	"/js/jquery.extention/jqBootstrapValidation.js"
-##])
-
+<script type="text/javascript">
+	
+require([	  "jquery","template","job/definition", "validator"],
+	function(jQuery,  template,   definition,           validator){
+	
+		setInterval(function(){
+			jQuery.post(CONTEXT_PATH+"/monitor.do", null, function(resp){
+				jQuery("#numTask").text(resp.numTask);
+				jQuery("#poolSize").text(resp.poolSize);
+				jQuery("#activityCount").text(resp.activityCount);
+				jQuery("#numQueue").text(resp.numQueue);
+			}, "json");
+		},1000);
+		
+});
+	
+</script>

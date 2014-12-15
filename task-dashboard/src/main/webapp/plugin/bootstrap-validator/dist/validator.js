@@ -181,6 +181,7 @@
   }
 
   Validator.prototype.onSubmit = function (e) {
+	  debugger;
     this.validate()
     if (this.isIncomplete() || this.hasErrors()) e.preventDefault()
   }

@@ -10,7 +10,7 @@ console.log('Global Config: Locale-> ',LOCALE)
 //	}
 //});
 require.config({
-	urlArgs: "v=" + (new Date()).getTime(),
+	urlArgs: "v=20141212.2",
 	baseUrl:CONTEXT_PATH,
 	paths:{
 		//基础JS库
@@ -27,8 +27,7 @@ require.config({
 		
 		"tagsinput":"plugin/bootstrap-tagsinput/bootstrap-tagsinput.min",
 		"switch":"plugin/bootstrap-switch/js/bootstrap-switch.min",
-		"jqValidation":"plugin/jquery.extention/jqBootstrapValidation",
-		"validator":"plugin/bootstrap-validator/dist/validator.min",
+		"validator":"plugin/bootstrap-validator/dist/validator",
 		"typeahead":"plugin/typeahead/typeahead.jquery.min",
 		"hogan":"plugin/hogan/hogan-2.0.0.min",
 		"messenger":"plugin/messenger/build/js/messenger.min",
@@ -41,6 +40,7 @@ require.config({
 		"utils/table/pager":"js/utils/util.table.pager",
 		
 		"job/definition":"js/app/definition",
+		"job/status":"js/app/status",
 //		"product/prop":"js/erp/config/product.prop",
 //		"product/define":"js/erp/config/product.define",
 		
@@ -50,9 +50,14 @@ require.config({
 		"Global":"js/app/globalConfig"
 	},
 	shim:{
+		"bs3validator":{deps:["jquery"]},
+		"bsvalidator":{deps:["jquery"]},
+		"bsvalidator-locale":{deps:["bsvalidator"]},
 		"Bootstrap":{deps:["jquery"]},
 		"jqValidation":{
-//			exports:"jqValidation",
+			deps:["jquery"]
+		},
+		"validator":{
 			deps:["jquery"]
 		},
 		"datetimepicker":{

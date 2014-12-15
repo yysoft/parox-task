@@ -155,7 +155,8 @@ public class DefinitionController extends BaseController {
 			@DateTimeFormat(pattern=AppConst.DATE_FORMAT_DEFAULT) Date start, 
 			Locale locale){
 		//TODO 手动执行任务
-		return null;
+		
+		return ajaxResult(true, null);
 	}
 	
 	@RequestMapping

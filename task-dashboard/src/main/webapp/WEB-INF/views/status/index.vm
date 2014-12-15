@@ -1,0 +1,4 @@
+#globalHeader("status")
+
+##parse("/status/widget/searchBar.vm")
+#parse("/status/widget/table.vm")

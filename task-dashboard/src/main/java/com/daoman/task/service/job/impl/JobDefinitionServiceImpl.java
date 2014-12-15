@@ -3,7 +3,6 @@
  */
 package com.daoman.task.service.job.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,7 +20,6 @@ import com.daoman.task.domain.job.JobDefinitionCond;
 import com.daoman.task.exception.ServiceException;
 import com.daoman.task.persist.JobDefinitionMapper;
 import com.daoman.task.service.job.JobDefinitionService;
-import com.daoman.task.thread.TaskControlThread;
 import com.daoman.task.utils.MvcUpload;
 import com.daoman.task.utils.ZookeeperUtil;
 import com.google.common.base.Strings;

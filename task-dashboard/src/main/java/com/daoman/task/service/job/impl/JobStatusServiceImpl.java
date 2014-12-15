@@ -43,6 +43,8 @@ public class JobStatusServiceImpl implements JobStatusService {
 			page.setLimit(AppConst.DEFAULT_PAGE_SIZE_100);
 		}
 		
+		page.setSortColumn(cond.getSort(page.getSort()));
+		
 		page.setRecords(jobStatusMapper.pageDefault(cond, page));
 		page.setTotals(jobStatusMapper.pageDefaultCount(cond));
 		

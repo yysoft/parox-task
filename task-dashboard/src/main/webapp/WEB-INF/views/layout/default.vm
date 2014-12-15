@@ -29,7 +29,7 @@
 	</script>
 	
 	<script src="#springUrl('/js/require.js')" ></script>
-	<script src="#springUrl('/js/main.js')" ></script>
+	<script src="#springUrl('/js/main.js')?v=20141215.1" ></script>
 	
   </head>
   <body>

@@ -37,7 +37,7 @@
 			<th class="text-center" >#springMessage('tb.definition.classpath')</th>
 			<th class="text-center">#springMessage('tb.definition.classname')</th>
 			<th class="text-center" width="80">#springMessage('tb.definition.single.running')</th>
-            <th class="text-center" width="70"></th>
+            <th class="text-center" width="120"></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -59,6 +59,7 @@
 			<td >{{definition.jobClassName}}</td>
 			<td >{{definition.singleRunning}}</td>
 			<td >
+			<a href="#springUrl('/status/index.do')?jobName={{definition.jobName}}" target="_blank">日志</a>
 			{{if definition.isInUse == 0}}
 			<button type="button" class="btn btn-success btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
 				<span class="glyphicon glyphicon-play"></span>

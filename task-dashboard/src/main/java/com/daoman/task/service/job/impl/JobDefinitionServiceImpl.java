@@ -135,6 +135,8 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 			page.setLimit(AppConst.DEFAULT_PAGE_SIZE_50);
 		}
 		
+		page.setSortColumn(cond.getSort(page.getSort()));
+		
 		page.setRecords(jobDefinitionMapper.pageDefault(cond, page));
 		page.setTotals(jobDefinitionMapper.pageDefaultCount(cond));
 		

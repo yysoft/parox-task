@@ -129,8 +129,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		
 		<include refid="defaultCond" />
 		
-		<if test="page.sort != null and page.sort != '' ">
-			order by ${page.sort} ${page.dir}
+		<if test="page.sortColumn != null and page.sortColumn != '' ">
+			order by ${page.sortColumn} ${page.dir}
 		</if>
 		limit #{page.start}, #{page.limit}
 	</select>

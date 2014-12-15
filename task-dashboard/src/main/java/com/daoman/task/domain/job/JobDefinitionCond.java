@@ -2,6 +2,8 @@ package com.daoman.task.domain.job;
 
 import java.io.Serializable;
 
+import com.google.common.base.Strings;
+
 public class JobDefinitionCond implements Serializable{
 	
 	
@@ -14,6 +16,38 @@ public class JobDefinitionCond implements Serializable{
 	private String jobClassName;
 	private Integer isInUse; //停用0启用1
 	private String jobNameMatchBefore;
+	
+	private enum Sort{
+		
+		ID("1", "jd.id");
+		
+		private String code;
+		private String column;
+		
+		private Sort(String code, String column){
+			this.code = code;
+			this.column = column;
+		}
+		
+		@Override
+		public String toString(){
+			return this.column;
+		}
+	}
+	
+	public String getSort(String code){
+		if(Strings.isNullOrEmpty(code)){
+			return Sort.ID.toString();
+		}
+		
+		for(Sort sort: Sort.values()){
+			if(code.equalsIgnoreCase(sort.code)){
+				return sort.toString();
+			}
+		}
+		
+		return Sort.ID.toString();
+	}
 	
 	public Integer getId() {
 		return id;

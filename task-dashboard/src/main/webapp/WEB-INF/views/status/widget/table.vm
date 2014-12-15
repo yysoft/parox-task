@@ -27,16 +27,7 @@
 	);
 </script>
 
-tb.status.jobname=任务ID
-tb.status.gmt.basetime=基准时间
-tb.status.result=执行结果
-tb.status.runtime=执行时间
-tb.status.gmt.trigger=触发时间
-tb.status.error.msg=错误内容
-tb.status.node.key=执行IP
-
-
-<script id="tpl_definition_list" type="text/html">
+<script id="tpl_status_list" type="text/html">
 	<table class="table table-hover table-bordered">
 		<thead>
 		<tr class="active">
@@ -47,35 +38,23 @@ tb.status.node.key=执行IP
 			<th class="text-center">#springMessage('tb.status.gmt.trigger')</th>
 			<th class="text-center" >#springMessage('tb.status.error.msg')</th>
 			<th class="text-center" >#springMessage('tb.status.node.key')</th>
-            <th class="text-center" width="50"></th>
+			<th class="text-center" width="50"></th>
 		</tr>
 		</thead>
 		<tbody>
 		{{each records as status i}}
 		<tr >
-			<td>
-				{{i+1}}
-			</td>
-			<td >{{status.jobName}}</td>
-			<td >{{definition.cron}}</td>
-			<td >{{definition.jobClasspath}}</td>
-			<td >{{definition.jobClassName}}</td>
-			<td >{{definition.singleRunning}}</td>
-			<td >{{definition.singleRunning}}</td>
+			<td>{{i+1}}	</td>
+			<td ><a href="#springUrl('/status/index.do')?jobName={{status.jobName}}" >{{status.jobName}}</a></td>
+			<td >{{status.gmtBasetimeStr}}</td>
+			<td >{{status.result}}</td>
+			<td >{{status.gmtTriggerStr}}</td>
+			<td >{{status.errorMsg}}</td>
+			<td >{{status.nodeKey}}</td>
 			<td >
-			{{if definition.isInUse == 0}}
-			<button type="button" class="btn btn-success btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
-				<span class="glyphicon glyphicon-play"></span>
-			</button>
-			{{/if}}
-			{{if definition.isInUse == 1}}
-			<button type="button" class="btn btn-warning btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
-				<span class="glyphicon glyphicon-stop"></span>
-			</button>
-			{{/if}}
-			<button type="button" class="btn btn-danger btn-xs act-delete" model-id="{{definition.id}}">
-				<span class="glyphicon glyphicon-remove"></span>
-			</button>
+##			<button type="button" class="btn btn-danger btn-xs act-delete" model-id="{{definition.id}}">
+##				<span class="glyphicon glyphicon-remove"></span>
+##			</button>
 			</td>
 		</tr>
 		{{/each}}

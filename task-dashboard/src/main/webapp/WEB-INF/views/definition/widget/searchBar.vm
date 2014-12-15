@@ -43,7 +43,7 @@
 	
 	<div class="form-group">
 		<label class="sr-only" for="jobNameMatchBefore">#springMessage('lb.definition.name')</label>
-		<input type="text" class="form-control" name="jobNameMatchBefore" placeholder="#springMessage('ph.definition.name')" ／>
+		<input type="text" class="form-control" name="jobNameMatchBefore" placeholder="#springMessage('ph.definition.name')" />
 	</div>
 	
 	<div  class="form-group">

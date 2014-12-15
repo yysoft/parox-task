@@ -83,14 +83,14 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	
 	<sql id="defaultCond" >
 		<where >
-			<if test="cond.result != null">
-				and js.result = #{result}
+			<if test="cond.result != null and cond.result != '' ">
+				and js.result = #{cond.result}
 			</if>
-			<if test="cond.jobName != null">
-				and js.job_name = #{jobName}
+			<if test="cond.jobName != null and cond.jobName != '' ">
+				and js.job_name = #{cond.jobName}
 			</if>
-			<if test="cond.category != null">
-				and js.category = #{category}
+			<if test="cond.category != null and cond.category !='' ">
+				and js.category = #{cond.category}
 			</if>
 		</where>
 	</sql>
@@ -102,8 +102,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		
 		<include refid="defaultCond" />
 		
-		<if test="page.sort != null and page.sort != '' ">
-			order by ${page.sort} ${page.dir}
+		<if test="page.sortColumn != null and page.sortColumn != '' ">
+			order by ${page.sortColumn} ${page.dir}
 		</if>
 		limit #{page.start}, #{page.limit}
 	</select>

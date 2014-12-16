@@ -3,7 +3,9 @@
  */
 package com.daoman.task.config;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -23,6 +25,7 @@ import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.service.job.JobDefinitionService;
 import com.daoman.task.service.job.JobStatusService;
 import com.daoman.task.thread.TaskControlThread;
+import com.daoman.task.utils.FileUtil;
 import com.daoman.task.utils.ZookeeperUtil;
 import com.google.common.collect.Lists;
 
@@ -44,7 +47,13 @@ public class JobInit {
 	
 	@PostConstruct
 	public void init(){
-		YYConnPool.getInstance().initConnPools(null);
+		Map<String, String> configProp=null;
+		try {
+			configProp = FileUtil.readPropertyFile("config.properties", "utf-8");
+			YYConnPool.getInstance().initConnPools(configProp.get("yyconn.db"));
+		} catch (IOException e) {
+			LOG.error("Error occurred when read properties file. The file is config.properties", e);
+		}
 
 		TaskControlThread taskThread = new TaskControlThread();
 		taskThread.setName("TaskControlThread");

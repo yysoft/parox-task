@@ -59,6 +59,12 @@ public class ZookeeperUtil {
 		if(zkClient==null){
 			LOG.debug("Zookeeper client is not exist, lock and create zkClient.");
 			lock.lock();
+			
+			if(zkClient!=null){
+				lock.unlock();
+				return zkClient;
+			}
+			
 			try {
 				Map<String, String> conf = FileUtil.readPropertyFile("config.properties", "utf-8");
 				String zkhost = conf.get("zk.server");
@@ -173,6 +179,5 @@ public class ZookeeperUtil {
 		
 		return false;
 	}
-	
 	
 }

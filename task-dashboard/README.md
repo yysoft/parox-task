@@ -1,5 +1,9 @@
 CHANGE LOG
 
+2014-12-17 v1.1.3
+--mays
+1. add jedis v2.6.1 dependence
+
 2014-12-16 v1.1.2
 --mays
 1. 变更 yyconn 数据库驱动为 com.mysql.jdbc.Driver

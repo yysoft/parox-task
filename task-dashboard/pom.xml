@@ -11,7 +11,7 @@
 
 	<groupId>com.daoman</groupId>
 	<artifactId>task-dashboard</artifactId>
-	<version>1.1.2</version>
+	<version>1.1.3</version>
 	<packaging>war</packaging>
 
 	<name>task-dashboard Maven Webapp</name>
@@ -148,7 +148,7 @@
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
 		</dependency>
-			
+
 	</dependencies>
 
 	<build>

@@ -82,9 +82,26 @@
 	</bean>
 
 	<!-- 国际化请求拦截器处理 -->
-	
 	<mvc:interceptors>
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
 	</mvc:interceptors>
+
+
+        <!-- 拦截器配置 -->  
+    <mvc:interceptors>  
+      <!-- session超时 -->  
+      <mvc:interceptor>  
+        <mvc:mapping path="/*/*"/>  
+       	<bean class="com.daoman.task.web.MemberContextInterceptor">
+		    <property name="auth" value="true"/>
+			<property name="loginUrl" value="/login/login.do"/>
+			<property name="excludeUrls">
+				<list>
+					<value>/login/*</value>
+				</list>
+			</property>
+		</bean>
+      </mvc:interceptor>  
+    </mvc:interceptors>  
 
 </beans>

@@ -2,7 +2,7 @@
 <div class="container">
 <div class="panel panel-default">
     <div class="panel-body">
-        <form id="formLogin" name="formLogin" class="form-horizontal" role="form" method="post" action="#springUrl('/p/puser/doLogin.do')">
+        <form id="formLogin" name="formLogin" class="form-horizontal" role="form" method="post" action="#springUrl('/login/doLogin.do')">
 			<input type="hidden" name="refurl" value="$!{refurl}" />
 			<input type="hidden" name="refparam" value="$!{refparam}" />
 			<div class="form-group">
@@ -65,7 +65,6 @@
 </div>
 ##loadScript(["/js/jquery.extention/jqBootstrapValidation.js"])
 </div>
-
 <script type="text/javascript">
 
 require([	"jquery","Bootstrap","jqValidation"],

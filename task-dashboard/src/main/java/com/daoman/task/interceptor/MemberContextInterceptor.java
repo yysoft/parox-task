@@ -1,4 +1,4 @@
-package com.daoman.task.web;
+package com.daoman.task.interceptor;
 
 
 import java.io.UnsupportedEncodingException;
@@ -7,23 +7,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UrlPathHelper;
 
-import com.daoman.task.utils.HttpSessionUtil;
-import com.daoman.task.utils.StrUtils;
+import com.daoman.task.config.AppConst;
+import com.daoman.task.domain.SessionUser;
 
 
 public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 
-	private Logger log = Logger.getLogger(MemberContextInterceptor.class);
-	
-	
+//	private Logger LOG = Logger.getLogger(MemberContextInterceptor.class);
+
 	public static final String USER_SESSION = "user";
 	
 	/**登录页面相关的常量*/
-	public static final String PROCESS_URL = "processUrl";
+//	public static final String PROCESS_URL = "processUrl";
 	public static final String RETURN_URL = "returnUrl";
 			
 	@Override
@@ -37,29 +35,19 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 		if (exclude(uri)) {
 			return true;
 		}
-		//cookie为空就从session读(搜索服务器等其他应用可根据具体需要是否舍弃以下代码)
-		if(HttpSessionUtil.getAttribute(request, USER_SESSION) != null){
+		
+		SessionUser sessionUser = (SessionUser) request.getSession().getAttribute(AppConst.SESSION_KEY);
+		
+		if(sessionUser!=null){
+			request.setAttribute("sessionUser", sessionUser);
 			return true;
 		}
 
-		//保存异常跳出的日志信息
-//			logInfo.setDetail(JSON.toJSONString(request.getCookies()));
-//			userLogService.add(null, null, 999, "09", request, logInfo);
-
-		//ajax请求登录专门处理
 		if(isAjaxRequest(request)){
 			response.addHeader("sessionstate", "timeout");
-			if(isHtml(request)){
-				//结果为html格式ajax请求
-				response.getWriter().write("");
-			}else{
-				//结果为json格式ajax请求
-				//response.getWriter().write("{\"success\":false, \"message\":\""+FrontUtils.getMessage(request, "error.common.session.timeout")+"\"}");
-				/*sendError(request, response, "error.common.session.timeout");*/
-			
-			}
 			return false;
 		}
+		
 		response.sendRedirect(getLoginUrl(request));
 		return false;
 	}
@@ -73,14 +61,34 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 				buff.append(ctx);
 			}
 		}
+		
+		String returnUrl = request.getParameter("returnUrl");
+		
 		buff.append(loginUrl).append("?");
-		//buff.append(RETURN_URL).append("=").append(returnUrl);
-		buff.append(RETURN_URL).append("=").append(StrUtils.encode(getLocation(request)));
-		if (!StringUtils.isBlank(processUrl)) {
-			buff.append("&").append(PROCESS_URL).append("=").append(
-					getProcessUrl(request));
+		if(returnUrl==null || "".equals(returnUrl)){
+			buff.append(RETURN_URL).append("=").append(encode(getLocation(request)));
+		}else{
+			buff.append(RETURN_URL).append("=").append(encode(returnUrl));
 		}
+		
+//		if (!StringUtils.isBlank(processUrl)) {
+//			buff.append("&").append(PROCESS_URL).append("=").append(
+//					getProcessUrl(request));
+//		}
 		return buff.toString();
+	}
+	
+	public String encode(String url) {
+		String str=url;
+		if(StringUtils.isBlank(str)){
+			return str;
+		}
+		try {
+			str = java.net.URLEncoder.encode(url, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return str;
 	}
 	/**
 	 * 获得当的访问路径
@@ -105,8 +113,6 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 	
 	private boolean isAjaxRequest(HttpServletRequest request) {
 		String requestType = request.getHeader("X-Requested-With");
-		//System.out.println("X-Requested-With:"+requestType);
-		//System.out.println("Accept:"+request.getHeader("Accept"));
 		if("XMLHttpRequest".equalsIgnoreCase(requestType)){
 			return true;
 		}else{
@@ -114,26 +120,26 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 		}
 	}
 	
-	private boolean isHtml(HttpServletRequest request) {
-		String acceptType = request.getHeader("Accept");
-		if(acceptType.indexOf("text/html")!=-1){
-			return true;
-		}else{
-			return false;
-		}
-	}
+//	private boolean isHtml(HttpServletRequest request) {
+//		String acceptType = request.getHeader("Accept");
+//		if(acceptType.indexOf("text/html")!=-1){
+//			return true;
+//		}else{
+//			return false;
+//		}
+//	}
 
-	private String getProcessUrl(HttpServletRequest request) {
-		StringBuilder buff = new StringBuilder();
-		if (loginUrl.startsWith("/")) {
-			String ctx = request.getContextPath();
-			if (!StringUtils.isBlank(ctx)) {
-				buff.append(ctx);
-			}
-		}
-		buff.append(processUrl);
-		return buff.toString();
-	}
+//	private String getProcessUrl(HttpServletRequest request) {
+//		StringBuilder buff = new StringBuilder();
+//		if (loginUrl.startsWith("/")) {
+//			String ctx = request.getContextPath();
+//			if (!StringUtils.isBlank(ctx)) {
+//				buff.append(ctx);
+//			}
+//		}
+//		buff.append(processUrl);
+//		return buff.toString();
+//	}
 	
 	private boolean exclude(String uri) {
 		//System.out.println(JSON.toJSONString(excludeUrls));
@@ -176,10 +182,10 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 	}*/
 	
 	private String loginUrl;
-	private String processUrl;
+//	private String processUrl;
 	private String returnUrl;
 	
-	private boolean auth = true;
+//	private boolean auth = true;
 	private String[] excludeUrls;
 	
 	
@@ -191,13 +197,13 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 		this.loginUrl = loginUrl;
 	}
 
-	public String getProcessUrl() {
-		return processUrl;
-	}
-
-	public void setProcessUrl(String processUrl) {
-		this.processUrl = processUrl;
-	}
+//	public String getProcessUrl() {
+//		return processUrl;
+//	}
+//
+//	public void setProcessUrl(String processUrl) {
+//		this.processUrl = processUrl;
+//	}
 
 	public String getReturnUrl() {
 		return returnUrl;
@@ -207,13 +213,13 @@ public class MemberContextInterceptor extends HandlerInterceptorAdapter{
 		this.returnUrl = returnUrl;
 	}
 
-	public boolean isAuth() {
-		return auth;
-	}
-
-	public void setAuth(boolean auth) {
-		this.auth = auth;
-	}
+//	public boolean isAuth() {
+//		return auth;
+//	}
+//
+//	public void setAuth(boolean auth) {
+//		this.auth = auth;
+//	}
 
 	public String[] getExcludeUrls() {
 		return excludeUrls;

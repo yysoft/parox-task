@@ -90,12 +90,11 @@
         <!-- 拦截器配置 -->  
     <mvc:interceptors>  
       <!-- session超时 -->  
-       	<bean class="com.daoman.task.web.MemberContextInterceptor">
-		    <property name="auth" value="true"/>
-			<property name="loginUrl" value="/login/login.do"/>
+       	<bean class="com.daoman.task.interceptor.MemberContextInterceptor">
+			<property name="loginUrl" value="/p/sys/login.do"/>
 			<property name="excludeUrls">
 				<list>
-					<value>/login/*</value>
+					<value>/p/*</value>
 				</list>
 			</property>
 		</bean>

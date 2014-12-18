@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Protocol;
 
 public class JedisUtil {
 	
@@ -33,8 +34,10 @@ public class JedisUtil {
 			try {
 				Map<String, String> conf = FileUtil.readPropertyFile("config.properties", "utf-8");
 				String host = conf.get("redis.server");
-				
-				pool = new JedisPool(new JedisPoolConfig(), host);
+				String confPort = conf.get("redis.server.port");
+				int port = (confPort==null || "".equals(confPort))?Protocol.DEFAULT_PORT:Integer.valueOf(confPort);
+						
+				pool = new JedisPool(new JedisPoolConfig(), host, port);
 //				pool = new JedisPool("127.0.0.1", 6379);
 				
 			} catch (IOException e) {
@@ -58,4 +61,7 @@ public class JedisUtil {
 		return null;
 	}
 	
+	public static void main(String[] args) {
+		JedisUtil.getJedis();
+	}
 }

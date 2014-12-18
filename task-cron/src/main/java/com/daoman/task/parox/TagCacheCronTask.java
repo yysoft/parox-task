@@ -36,11 +36,9 @@ public class TagCacheCronTask implements CronTask {
 		Jedis jedis = JedisUtil.getJedis();
 		
 		Set<String> tags = jedis.keys("tag_*_*_*");
-//		for(String tag: tags){
-//			saveToDB(tag, jedis);
-//		}
-		
-		saveToDB("test", jedis);
+		for(String tag: tags){
+			saveToDB(tag, jedis);
+		}
 		
 		return true;
 	}
@@ -61,15 +59,14 @@ public class TagCacheCronTask implements CronTask {
 			if(result!=null){
 				String tagStr = (String) result.get(0);
 				
-//				Tag tag = (Tag) JSONObject.toBean(JSONObject.fromObject(tagStr), Tag.class);
-//				tagService.mergeTag(tag);
-				Tag tag =  new Tag();
-				tag.setInfoCount(0l);
-				tag.setSearchCount(0l);
-				tag.setClickCount(0l);
-				tag.setTagName("测试");
-				tag.setOrgId(0l);
-				tag.setCat(0);
+				Tag tag = (Tag) JSONObject.toBean(JSONObject.fromObject(tagStr), Tag.class);
+//				Tag tag =  new Tag();
+//				tag.setInfoCount(0l);
+//				tag.setSearchCount(0l);
+//				tag.setClickCount(0l);
+//				tag.setTagName("测试");
+//				tag.setOrgId(0l);
+//				tag.setCat(0);
 				
 				saveTag(tag);
 				isUpdated = true;

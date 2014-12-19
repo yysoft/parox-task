@@ -36,9 +36,13 @@ public class TagCacheCronTask implements CronTask {
 		Jedis jedis = JedisUtil.getJedis();
 		
 		Set<String> tags = jedis.keys("tag_*_*_*");
+		
+		LOG.info("Get tags from cache:"+tags.toString());
 		for(String tag: tags){
 			saveToDB(tag, jedis);
 		}
+		
+		JedisUtil.getPool().returnResource(jedis);
 		
 		return true;
 	}
@@ -60,14 +64,7 @@ public class TagCacheCronTask implements CronTask {
 				String tagStr = (String) result.get(0);
 				
 				Tag tag = (Tag) JSONObject.toBean(JSONObject.fromObject(tagStr), Tag.class);
-//				Tag tag =  new Tag();
-//				tag.setInfoCount(0l);
-//				tag.setSearchCount(0l);
-//				tag.setClickCount(0l);
-//				tag.setTagName("测试");
-//				tag.setOrgId(0l);
-//				tag.setCat(0);
-				
+				LOG.info("The tag key:"+ key+ " and value is:"+tagStr);
 				saveTag(tag);
 				isUpdated = true;
 			}
@@ -80,7 +77,7 @@ public class TagCacheCronTask implements CronTask {
 		YYConn conn = new YYConn("parox");
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("update c_tag set" )
+		sb.append(" update c_tag set" )
 			.append(" info_count=info_count+?,")
 			.append(" search_count = search_count + ?,")
 			.append(" click_count = click_count + ?")
@@ -103,7 +100,7 @@ public class TagCacheCronTask implements CronTask {
 				result = false;
 			}
 		} catch (SQLException e) {
-			LOG.error("Erorr prepare statement. SQL:"+sb.toString());
+			LOG.error("Erorr prepare statement. SQL:"+sb.toString(), e);
 			result = false;
 		}finally{
 			conn.close();

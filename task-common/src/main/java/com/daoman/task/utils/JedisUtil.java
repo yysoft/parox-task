@@ -2,6 +2,7 @@ package com.daoman.task.utils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -62,6 +63,29 @@ public class JedisUtil {
 	}
 	
 	public static void main(String[] args) {
-		JedisUtil.getJedis();
+		for(int i =0; i<20; i++){
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Jedis jedis = null;
+					try {
+						 jedis = JedisUtil.getJedis();
+						
+						Set<String> tags = jedis.keys("tag_*_*_*");
+						
+						System.out.println(">>>>"+tags.toString());
+						
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}finally{
+						JedisUtil.getPool().returnResource(jedis);
+					}
+				}
+			});
+			thread.start();
+		}
+		
 	}
 }

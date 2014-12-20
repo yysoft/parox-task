@@ -21,8 +21,11 @@ public interface JobStatusMapper {
 	
 	public Integer update(JobStatus status);
 	
-	public List<JobStatus> pageDefault(@Param("cond") JobStatusCond cond, @Param("page") Pager<JobStatus> page);
+	public List<JobStatus> pageDefault(@Param("cond") JobStatusCond cond,
+			@Param("page") Pager<JobStatus> page);
 	
 	public Integer pageDefaultCount(@Param("cond") JobStatusCond cond);
+	
+	public Integer delete(@Param("cond") JobStatusCond cond);
 	
 }

@@ -11,6 +11,7 @@ public class JobStatusCond implements Serializable{
 	private String jobName;
 	private String result;
 	private String category;
+	private Integer id;
 	
 	private enum Sort{
 		
@@ -62,6 +63,15 @@ public class JobStatusCond implements Serializable{
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 	
 	
 }

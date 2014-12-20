@@ -16,14 +16,20 @@
 						<form class="navbar-form navbar-left" role="search" action="#springUrl('/definition/index.do')" id="search_form">
 	
                         	<div class="form-group">
-                        		<h5>
 									<span class="label label-primary">
 										$!{jobName}
 										<a href="#springUrl('/status/index.do')" style="color:white;"><span class="glyphicon glyphicon-remove"></span></a>
 									</span>
-								</h5>
                         	</div>
+							
+								<div  class="form-group">
+                                	<button type="button" class="btn btn-danger btn-sm" id="clear-btn">
+                                		<span class="glyphicon glyphicon-remove"></span> #springMessage('btn.clear')
+                                	</button>
+                                </div>
+								
                     	</form>
+						
 						
 						
 				</div>
@@ -32,4 +38,13 @@
 	</div>
 </div>
 
+<script type="text/javascript">
+	require([	  "jquery","template","messenger", "job/status", "utils/table"],
+		function(jQuery,  template,   messenger,    status,            table){
+			jQuery("#clear-btn").click(function(){
+				status.removeAll("$!{jobName}");
+			});
+		}
+	);
+</script>
 #end

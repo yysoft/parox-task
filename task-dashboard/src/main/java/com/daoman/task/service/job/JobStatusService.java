@@ -12,4 +12,5 @@ public interface JobStatusService {
 	
 	public Pager<JobStatus> pageDefault(JobStatusCond cond, Pager<JobStatus> page);
 	
+	public Integer delete(JobStatusCond cond);
 }

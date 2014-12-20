@@ -23,6 +23,8 @@
 			
 			status.table.search({"jobName":"$!{jobName}"});
 			
+			status.bindRemoveOne(jQuery("#status_list"), "button[data-act=remove]");
+			
 		}
 	);
 </script>
@@ -38,12 +40,12 @@
 			<th class="text-center">#springMessage('tb.status.gmt.trigger')</th>
 			<th class="text-center" >#springMessage('tb.status.error.msg')</th>
 			<th class="text-center" >#springMessage('tb.status.node.key')</th>
-			<th class="text-center" width="50"></th>
+			<th class="text-center" width="40"></th>
 		</tr>
 		</thead>
 		<tbody>
 		{{each records as status i}}
-		<tr >
+		<tr>
 			<td>{{i+1}}	</td>
 			<td ><a href="#springUrl('/status/index.do')?jobName={{status.jobName}}" >{{status.jobName}}</a></td>
 			<td >{{status.gmtBasetimeStr}}</td>
@@ -52,9 +54,9 @@
 			<td >{{status.errorMsg}}</td>
 			<td >{{status.nodeKey}}</td>
 			<td >
-##			<button type="button" class="btn btn-danger btn-xs act-delete" model-id="{{definition.id}}">
-##				<span class="glyphicon glyphicon-remove"></span>
-##			</button>
+			<button type="button" class="btn btn-danger btn-xs act-delete" data-act="remove" model-id="{{status.id}}">
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
 			</td>
 		</tr>
 		{{/each}}

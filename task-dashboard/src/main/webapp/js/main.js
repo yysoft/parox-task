@@ -10,7 +10,7 @@ console.log('Global Config: Locale-> ',LOCALE)
 //	}
 //});
 require.config({
-	urlArgs: "v=20141215.5",
+	urlArgs: "v=20141220.6",
 	baseUrl:CONTEXT_PATH,
 	paths:{
 		//基础JS库

@@ -34,8 +34,8 @@
 			<th class="text-center" width="10">#</th>
 			<th class="text-center" >#springMessage('tb.definition.name')</th>
 			<th class="text-center" width="100">#springMessage('tb.definition.cron')</th>
-			<th class="text-center" >#springMessage('tb.definition.classpath')</th>
-			<th class="text-center">#springMessage('tb.definition.classname')</th>
+			<th class="text-center" >#springMessage('tb.definition.description')</th>
+			<th class="text-center">#springMessage('tb.definition.classname')/#springMessage('tb.definition.classpath')</th>
 			<th class="text-center" width="80">#springMessage('tb.definition.single.running')</th>
             <th class="text-center" width="120"></th>
 		</tr>
@@ -55,8 +55,8 @@
 				<a href="#springUrl('/definition/edit.do')?id={{definition.id}}" >{{definition.jobName}}</a>
 			</td>
 			<td >{{definition.cron}}</td>
-			<td >{{definition.jobClasspath}}</td>
-			<td >{{definition.jobClassName}}</td>
+			<td >{{definition.description}}</td>
+			<td >{{definition.jobClassName}} <br /> {{definition.jobClasspath}} </td>
 			<td >{{definition.singleRunning}}</td>
 			<td >
 			<a href="#springUrl('/status/index.do')?jobName={{definition.jobName}}" target="_blank">日志</a>

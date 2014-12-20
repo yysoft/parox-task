@@ -13,6 +13,7 @@ import com.daoman.task.domain.job.JobStatus;
 import com.daoman.task.domain.job.JobStatusCond;
 import com.daoman.task.persist.JobStatusMapper;
 import com.daoman.task.service.job.JobStatusService;
+import com.google.common.base.Strings;
 
 /**
  * @author parox
@@ -49,6 +50,15 @@ public class JobStatusServiceImpl implements JobStatusService {
 		page.setTotals(jobStatusMapper.pageDefaultCount(cond));
 		
 		return page;
+	}
+
+	@Override
+	public Integer delete(JobStatusCond cond) {
+		if(cond.getId()==null && Strings.isNullOrEmpty(cond.getJobName())){
+			
+			return null;
+		}
+		return jobStatusMapper.delete(cond);
 	}
 
 }

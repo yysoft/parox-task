@@ -36,7 +36,7 @@ public class SysController extends BaseController{
 			String password, ModelMap model, String returnUrl)
 			throws IOException {
 		//帐号和密码写死在配置文件中
-		Map<String, String> conf = FileUtil.readPropertyFile("user.account.properties", "utf-8");
+		Map<String, String> conf = FileUtil.readPropertyFile("file:/opt/config/task.account.properties", "utf-8");
 		if(conf.get(name) != null){
 			if(conf.get(name).equals(password)){
 				

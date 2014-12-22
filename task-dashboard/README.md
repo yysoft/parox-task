@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-12-22 v1.1.4
+1. 移除登录账号配置文件
+
 2014-12-17 v1.1.3
 --mays
 1. add jedis v2.6.1 dependence

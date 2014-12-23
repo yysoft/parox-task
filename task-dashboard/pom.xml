@@ -11,7 +11,7 @@
 
 	<groupId>com.daoman</groupId>
 	<artifactId>task-dashboard</artifactId>
-	<version>1.1.4</version>
+	<version>1.1.5</version>
 	<packaging>war</packaging>
 
 	<name>task-dashboard Maven Webapp</name>
@@ -29,6 +29,17 @@
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-conn</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.caiban</groupId>
+			<artifactId>yy-utils</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.caiban</groupId>
+			<artifactId>yy-util-mvcupload</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.daoman</groupId>
 			<artifactId>task-common</artifactId>

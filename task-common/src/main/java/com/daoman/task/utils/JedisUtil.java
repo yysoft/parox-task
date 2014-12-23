@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import net.caiban.utils.file.FileUtil;
+
 import org.apache.log4j.Logger;
 
 import redis.clients.jedis.Jedis;

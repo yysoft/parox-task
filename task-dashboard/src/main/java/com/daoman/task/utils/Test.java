@@ -34,7 +34,7 @@ public class Test {
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException, IOException, KeeperException, InterruptedException {
 		
-		System.out.println(IpUtil.getRealIp());
+//		System.out.println(IpUtil.getRealIp());
 		
 	}
 	

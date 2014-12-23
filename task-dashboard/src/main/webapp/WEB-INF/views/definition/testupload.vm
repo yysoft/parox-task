@@ -1,0 +1,21 @@
+#globalHeader("definition")
+	#loadCss([
+		"/plugin/bootstrapvalidator/dist/css/bootstrapValidator.min.css"
+	])
+	
+<div class="container">
+	<div class="row">
+		<div class="table-responsive" id="definition_list">
+			
+			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition/uploadjar.do')" method="post" role="form" enctype="multipart/form-data">
+				<input type="file" name="uploadfile0"/>
+				<input type="file" name="uploadfile1"/>
+				<input type="file" name="uploadfile2"/>
+				<input type="file" name="uploadfile3"/>
+				<button id="definition_submit_btn" type="submit" class="btn btn-primary" data-loading-text="#springMessage('tip.loading')">#springMessage('btn.submit')</button>
+			</form>
+			
+		</div>
+	</div>
+</div>
+	

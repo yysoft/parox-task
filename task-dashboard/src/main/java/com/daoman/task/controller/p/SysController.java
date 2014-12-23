@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.caiban.utils.file.FileUtil;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.daoman.task.config.AppConst;
 import com.daoman.task.controller.BaseController;
 import com.daoman.task.domain.SessionUser;
-import com.daoman.task.utils.FileUtil;
 import com.google.common.base.Strings;
 
 @Controller

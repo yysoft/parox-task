@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import net.caiban.utils.upload.MvcUpload;
+import net.caiban.utils.upload.UploadResult;
 import net.sf.json.JSONObject;
 
 import org.springframework.context.MessageSource;
@@ -26,9 +28,6 @@ import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.domain.job.JobDefinitionCond;
 import com.daoman.task.exception.ServiceException;
 import com.daoman.task.service.job.JobDefinitionService;
-import com.daoman.task.utils.MvcUpload;
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 
 /**
  * @author parox
@@ -168,16 +167,26 @@ public class DefinitionController extends BaseController {
 	}
 	
 	@RequestMapping
+	public String testupload(HttpServletRequest request){
+		
+		return null;
+	}
+	
+	@Deprecated
+	@RequestMapping
 	@ResponseBody
-	public Map<String, Object> uploadjar(HttpServletRequest request) {
+	public Map<String, UploadResult> uploadjar(HttpServletRequest request) {
 		
-		Map<String, Object> result = Maps.newHashMap();
-		String uploadedFile = MvcUpload.localUpload(request, UPLOAD_ROOT, null);
-		if (!Strings.isNullOrEmpty(uploadedFile)) {
-			result.put("success", true);
-			result.put("message", uploadedFile);
-		}
+//		Map<String, Object> result = Maps.newHashMap();
+//		String uploadedFile = MvcUpload.localUpload(request, UPLOAD_ROOT, null);
+//		if (!Strings.isNullOrEmpty(uploadedFile)) {
+//			result.put("success", true);
+//			result.put("message", uploadedFile);
+//		}
 		
-		return result;
+//		return result;
+		Map<String, UploadResult> resultMap = MvcUpload.batchLocalUpload(request, "/home/parox/static/task/jar/", ""+new Date().getTime());
+		
+		return resultMap;
 	}
 }

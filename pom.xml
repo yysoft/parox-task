@@ -35,12 +35,22 @@
 	<dependencyManagement>
 		<dependencies>
 
-            <dependency>
-                <groupId>net.caiban</groupId>
-                <artifactId>yy-conn</artifactId>
-                <version>1.0.2</version>
-            </dependency>
-            
+		<dependency>
+			<groupId>net.caiban</groupId>
+			<artifactId>yy-conn</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.caiban</groupId>
+			<artifactId>yy-utils</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.caiban</groupId>
+			<artifactId>yy-util-mvcupload</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.daoman</groupId>
 			<artifactId>task-common</artifactId>

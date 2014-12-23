@@ -12,6 +12,7 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import net.caiban.db.YYConnPool;
+import net.caiban.utils.file.FileUtil;
 
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
@@ -25,7 +26,6 @@ import com.daoman.task.domain.job.JobDefinition;
 import com.daoman.task.service.job.JobDefinitionService;
 import com.daoman.task.service.job.JobStatusService;
 import com.daoman.task.thread.TaskControlThread;
-import com.daoman.task.utils.FileUtil;
 import com.daoman.task.utils.ZookeeperUtil;
 import com.google.common.collect.Lists;
 

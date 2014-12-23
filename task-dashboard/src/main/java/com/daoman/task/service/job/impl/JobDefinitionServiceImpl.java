@@ -3,10 +3,16 @@
  */
 package com.daoman.task.service.job.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import net.caiban.utils.upload.MvcUpload;
+import net.caiban.utils.upload.UploadException;
+import net.caiban.utils.upload.UploadResult;
+import net.caiban.utils.upload.filter.JarUploadFilter;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -20,7 +26,6 @@ import com.daoman.task.domain.job.JobDefinitionCond;
 import com.daoman.task.exception.ServiceException;
 import com.daoman.task.persist.JobDefinitionMapper;
 import com.daoman.task.service.job.JobDefinitionService;
-import com.daoman.task.utils.MvcUpload;
 import com.daoman.task.utils.ZookeeperUtil;
 import com.google.common.base.Strings;
 
@@ -73,8 +78,17 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		return MvcUpload.localUpload(request, new String(path), null);
+		
+		try {
+			UploadResult result = MvcUpload.localUpload(request, new String(path), new JarUploadFilter());
+			return result.getFullPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (UploadException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	private JobDefinition defaultDefinition(JobDefinition definition){

@@ -71,16 +71,20 @@ public class DefinitionController extends BaseController {
 	}
 	
 	@RequestMapping
-	public ModelAndView create(HttpServletRequest request, JobDefinition definition, ModelMap model){
+	public ModelAndView create(HttpServletRequest request, JobDefinition definition, ModelMap model,
+			Locale locale){
 		
-		definition = jobDefinitionService.save(request, definition);
-		if(definition.getId()!=null && definition.getId().intValue()>0){
-			return new ModelAndView("redirect:index.do");
+		try {
+			definition = jobDefinitionService.save(request, definition);
+			if(definition.getId()!=null && definition.getId().intValue()>0){
+				return new ModelAndView("redirect:index.do");
+			}
+		} catch (ServiceException e) {
+			model.put("error", messageSource.getMessage(e.getMessage(), null, locale));
 		}
 		
-		model.put("error", "failure create");
 		model.put("definition", JSONObject.fromObject(definition).toString());
-		return new ModelAndView("edit");
+		return new ModelAndView("/definition/edit");
 	}
 	
 	@RequestMapping

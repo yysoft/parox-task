@@ -38,4 +38,7 @@ public interface JobDefinitionMapper {
 	
 	public Integer updateIsInUse(@Param("id")Integer id, @Param("isInUse")Integer isInUse);
 	
+	public Integer countByJobName(String jobName);
+	
+	public Integer countByClassName(String className);
 }

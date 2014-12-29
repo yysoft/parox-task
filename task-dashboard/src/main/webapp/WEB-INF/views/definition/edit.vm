@@ -9,7 +9,9 @@
 			#set($action = "/create.do")
 			#if(${id})
 				#set($action = "/update.do")
+				#set($readonly = " readonly='true' ")
 			#end
+			
 			<form id="definition_form" class="form-horizontal" action="#springUrl('/definition')$!{action}" method="post" role="form" enctype="multipart/form-data">
 				<input type="hidden" name="id" value="" />
 			<div class="panel panel-default" id="product">
@@ -21,7 +23,7 @@
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">#springMessage("lb.definition.name")：</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" name="jobName" placeholder="#springMessage('ph.definition.name')" required/>  <!-- pattern="^([_A-z0-9\-])+$"  -->
+							<input type="text" class="form-control" name="jobName" placeholder="#springMessage('ph.definition.name')" $!{readonly} required/>  <!-- pattern="^([_A-z0-9\-])+$"  -->
 						</div>
 					</div>
 					<div class="form-group">
@@ -43,9 +45,9 @@
 								<label >
 									<input type="radio" name="singleRunning" value="SINGLE" checked="checked"  /> SINGLE
 								</label>
-								<label >
-									<input type="radio" name="singleRunning" value="MULITY" /> MULITY
-								</label>
+##								<label >
+##									<input type="radio" name="singleRunning" value="MULITY" /> MULITY
+##								</label>
 						</div>
 					</div>
 					<div class="form-group">
@@ -100,7 +102,7 @@
 
 			#if(${error})
 				Messenger().post({
-					message: "#springMessage('alert.save.failure')",
+					message: "${error}",
 					type: "error",
 					showCloseButton: true
 				});

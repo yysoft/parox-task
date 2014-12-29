@@ -148,5 +148,13 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 		where id=#{id}
 	</update>
 	
+	<select id="countByJobName"  resultType="java.lang.Integer">
+		select count(1) as c from job_definition where job_name=#{jobName}
+	</select>
+	
+	<select id="countByClassName"  resultType="java.lang.Integer">
+		select count(1) as c from job_definition where job_class_name=#{className}
+	</select>
+	
 </mapper>
 

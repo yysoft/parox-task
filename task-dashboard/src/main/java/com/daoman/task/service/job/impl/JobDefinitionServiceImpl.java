@@ -51,13 +51,24 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	}
 
 	@Override
-	public JobDefinition save(HttpServletRequest request, JobDefinition definition) {
+	public JobDefinition save(HttpServletRequest request, JobDefinition definition) throws ServiceException {
 		
 		//XXX job name, job classname 不允许重名未做判定
+		
+		int c = jobDefinitionMapper.countByJobName(definition.getJobName());
+		if(c>0){
+			throw new ServiceException("e.definition.job.name.dulipcate");
+		}
+		
+		c = jobDefinitionMapper.countByClassName(definition.getJobClassName());
+		if(c>0){
+			throw new ServiceException("e.definition.class.name.dulipcate");
+		}
+		
 		String jarpath = uploadJar(request);
 		
 		if(Strings.isNullOrEmpty(jarpath)){
-			return null;
+			throw new ServiceException("e.definition.upload.failure");
 		}
 		
 		definition.setJobClasspath(jarpath);

@@ -23,7 +23,7 @@ public interface JobDefinitionService {
 	
 	public Pager<JobDefinition> pageDefault(JobDefinitionCond cond, Pager<JobDefinition> page);
 	
-	public JobDefinition save(HttpServletRequest request, JobDefinition definition);
+	public JobDefinition save(HttpServletRequest request, JobDefinition definition) throws ServiceException;
 	
 	public JobDefinition queryOne(Integer id);
 	

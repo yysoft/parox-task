@@ -294,6 +294,24 @@
 				<version>2.6.1</version>
 			</dependency>
 
+		<dependency>
+			<groupId>com.aliyun.openservices</groupId>
+			<artifactId>aliyun-openservices</artifactId>
+			<version>1.0.12</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.aliyun.mqs</groupId>
+			<artifactId>aliyun-mqs</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.darwinsys</groupId>
+			<artifactId>hirondelle-date4j</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

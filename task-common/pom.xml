@@ -47,6 +47,21 @@
 			<artifactId>json-lib</artifactId>
 			<classifier>jdk15</classifier>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.aliyun.openservices</groupId>
+			<artifactId>aliyun-openservices</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.aliyun.mqs</groupId>
+			<artifactId>aliyun-mqs</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.darwinsys</groupId>
+			<artifactId>hirondelle-date4j</artifactId>
+		</dependency>
 
 	</dependencies>
 </project>

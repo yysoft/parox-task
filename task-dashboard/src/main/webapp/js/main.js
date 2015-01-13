@@ -27,7 +27,7 @@ require.config({
 		
 		"tagsinput":"plugin/bootstrap-tagsinput/bootstrap-tagsinput.min",
 		"switch":"plugin/bootstrap-switch/js/bootstrap-switch.min",
-		"validator":"plugin/bootstrap-validator/dist/validator",
+		"validator":"plugin/bootstrap-validator/dist/validator.min",
 		"typeahead":"plugin/typeahead/typeahead.jquery.min",
 		"hogan":"plugin/hogan/hogan-2.0.0.min",
 		"messenger":"plugin/messenger/build/js/messenger.min",

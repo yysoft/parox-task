@@ -37,7 +37,7 @@ public class TaskRunThread extends Thread {
 	
 	Date targetDate;
 	
-	Logger LOG = Logger.getLogger(TaskRunThread.class);
+	private final static Logger LOG = Logger.getLogger(TaskRunThread.class);
 	
 	private String lockPath;
 	

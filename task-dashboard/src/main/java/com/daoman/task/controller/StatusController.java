@@ -47,9 +47,9 @@ public class StatusController extends BaseController {
 	public Pager<JobStatus> page(HttpServletRequest request, 
 			JobStatusCond cond, Pager<JobStatus> page){
 		
-		page = jobStatusService.pageDefault(cond, page);
+		Pager<JobStatus> resultPage = jobStatusService.pageDefault(cond, page);
 		
-		return page;
+		return resultPage;
 	}
 	
 	@RequestMapping

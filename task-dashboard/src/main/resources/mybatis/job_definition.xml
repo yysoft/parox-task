@@ -116,7 +116,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 				and jd.job_group = #{jobGroup}
 			</if>
 			<if test="cond.jobNameMatchBefore != null">
-				and jd.job_name like concat(#{jobNameMatchBefore}, '%') 
+				and jd.job_name like concat(#{cond.jobNameMatchBefore}, '%') 
 			</if>
 			
 		</where>

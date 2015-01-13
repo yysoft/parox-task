@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mt8">
 	<div class="row">
 		<div class="table-responsive" id="definition_list">
 			#springMessage("tip.loading")
@@ -9,6 +9,7 @@
 	require([	  "jquery","template","messenger", "job/definition", "utils/table"],
 		function(jQuery,  template,   messenger,    definition,            table){
 		
+			//初始化搜索
 			definition.table.init({
 				tpl:{
 					"table":"tpl_definition_list"
@@ -21,8 +22,40 @@
 				}
 			});
 			
+			definition.bindTableAct();
+			
 			definition.table.search();
 			
+##			jQuery("#definition_list").on("click", "input[data-act=checked]", function(e){
+##				e.stopPropagation();
+##			} );
+			
+			//处理展开效果
+			jQuery("#definition_list").on("click", "td[data-act=toggle-details]", function(){
+			
+				var id=jQuery(this).attr("model-id");
+				
+				if(jQuery("#tr-details-"+id).hasClass("hide")){
+					jQuery("#tr-details-"+id).removeClass("hide");
+				}
+				
+				if(jQuery(this).hasClass("dropup")){
+					jQuery("#tr-details-"+id).hide();
+					jQuery(this).removeClass("dropup");
+					jQuery(this).parent().removeClass("info");
+				}else{
+					jQuery("#tr-details-"+id).show();
+					jQuery(this).addClass("dropup");
+					jQuery(this).parent().addClass("info");
+				}
+				
+			});
+			
+			//处理日期选择框
+##			$('#definition_list').datetimepicker({
+##				format: 'yyyy-mm-dd hh:ii:ss'
+##			});
+			//jQuery("definition_list div[data-name=gmt-basedate]").datetimepicker();
 		}
 	);
 </script>
@@ -31,18 +64,26 @@
 	<table class="table table-hover table-bordered">
 		<thead>
 		<tr class="active">
+			<th class="text-center" width="10"></th>
+			<th class="text-center" width="10"></th>
 			<th class="text-center" width="10">#</th>
 			<th class="text-center" >#springMessage('tb.definition.name')</th>
 			<th class="text-center" width="100">#springMessage('tb.definition.cron')</th>
 			<th class="text-center" >#springMessage('tb.definition.description')</th>
-			<th class="text-center">#springMessage('tb.definition.classname')/#springMessage('tb.definition.classpath')</th>
+##			<th class="text-center">#springMessage('tb.definition.classname')/#springMessage('tb.definition.classpath')</th>
 			<th class="text-center" width="80">#springMessage('tb.definition.single.running')</th>
-            <th class="text-center" width="120"></th>
+            <th class="text-center" width="100"></th>
 		</tr>
 		</thead>
 		<tbody>
 		{{each records as definition i}}
 		<tr >
+			<td data-act="toggle-details" model-id="{{definition.id}}">
+				<span class="caret"></span>
+			</td>
+			<td>
+				<input type="checkbox" value="{{definition.id}}" data-act="checked" />
+			</td>
 			<td>
 				{{if definition.isInUse == 0}}
 				<span class="glyphicon glyphicon-stop text-danger" id="run-st-{{definition.id}}" ></span>
@@ -56,25 +97,35 @@
 			</td>
 			<td >{{definition.cron}}</td>
 			<td >{{definition.description}}</td>
-			<td >{{definition.jobClassName}} <br /> {{definition.jobClasspath}} </td>
+##			<td >{{definition.jobClassName}} <br /> {{definition.jobClasspath}} </td>
 			<td >{{definition.singleRunning}}</td>
-			<td >
-			<a href="#springUrl('/status/index.do')?jobName={{definition.jobName}}" target="_blank">日志</a>
+			<td class="text-center">
+			<a class="btn btn-info btn-xs" href="#springUrl('/status/index.do')?jobName={{definition.jobName}}" target="_blank">
+                <span class="glyphicon glyphicon-stats"></span>
+			</a>
 			{{if definition.isInUse == 0}}
-			<button type="button" class="btn btn-success btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
+			<button type="button" class="btn btn-success btn-xs" data-act="run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
 				<span class="glyphicon glyphicon-play"></span>
 			</button>
 			{{/if}}
 			{{if definition.isInUse == 1}}
-			<button type="button" class="btn btn-warning btn-xs act-run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
+			<button type="button" class="btn btn-warning btn-xs" data-act="run" model-id="{{definition.id}}" model-isinuse="{{definition.isInUse}}">
 				<span class="glyphicon glyphicon-stop"></span>
 			</button>
 			{{/if}}
-			<button type="button" class="btn btn-danger btn-xs act-delete" model-id="{{definition.id}}">
+			<button type="button" class="btn btn-danger btn-xs" data-act="remove" model-id="{{definition.id}}">
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
 			</td>
 		</tr>
+		
+		<tr class="info hide" id="tr-details-{{definition.id}}">
+			<td colspan="8">
+                <p class="text-danger">#springMessage('tb.definition.classname') : {{definition.jobClassName}}</p>
+				<p class="text-danger">#springMessage('tb.definition.classpath') : {{definition.jobClasspath}}</p>
+			</td>
+		</tr>
+		
 		{{/each}}
 		</tbody>
 	</table>

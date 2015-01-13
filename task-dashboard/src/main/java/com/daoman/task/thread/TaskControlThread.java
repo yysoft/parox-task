@@ -54,7 +54,7 @@ public class TaskControlThread extends Thread {
 //	public static Map<String, TaskRunThread> runningThread = new ConcurrentHashMap<String, TaskRunThread>();
 	public static boolean runSwitch = true;
 	
-	final static Logger LOG = Logger.getLogger(TaskControlThread.class);
+	private final static Logger LOG = Logger.getLogger(TaskControlThread.class);
 
 	public TaskControlThread(int corePoolSize, int maximumPoolSize,
 			long keepAliveTime, int workQueueSize) {

@@ -19,27 +19,93 @@
 	</div>
 </div>
 
+<div class="container">
+	<div class="row">
+		<form id="definitionActForm" class="form-inline" role="form" onsubmit="return false;" >
+        	<div class="form-group col-xs-3">
+        		<div class="input-group date" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-name="gmt-basedate">
+        			<input class="form-control" type="text" name="gmtBasedate" id="gmtBasedate"/>
+        			<div class="input-group-addon">
+        				<span class="glyphicon glyphicon-calendar"></span>
+        			</div>
+        		</div>
+        	</div>
+        	
+			<button type="submit" class="btn btn-success">#springMessage("btn.run")</button>
+			
+        </form>
+	</div>
+</div>
+
+#loadCss([
+		"/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"
+])
+
 <script type="text/javascript">
-	require([	"jquery","template","job/definition"],
-		function(jQuery,  template, definition){
+	require([	"jquery","template","job/definition", "messenger", "job/status", "datetimepicker"],
+		function(jQuery,  template, definition,           messenger,    status){
 			
 			var html=template("tpl_definition_search_form", {});
 			
 			jQuery("#definition_search_form").html(html);
 			
+			jQuery("#definitionActForm div[data-name=gmt-basedate]").datetimepicker({
+				autoclose:true,
+				minView:1,
+				forceParse:false,
+				pickerPosition:"bottom-left",
+				todayBtn:true
+			});
 			
-			/*
-			jQuery("#search_form").submit(function(fm){
-				product.search(jQuery("#search_form").serialize());
+			jQuery("#definition_search_form").on("submit", "#search_form", function(){
+				definition.table.search(jQuery(this).serialize());
+			});
+			
+			var message=Messenger();
+			
+			jQuery("#definitionActForm").submit(function(e){
+			
+				var gmtbasedate=jQuery("#gmtBasedate").val();
+				
+				if(gmtbasedate==""){
+					message.post({
+						message: "#springMessage('e.definition.run.target.date.not.exist')",
+						type: "error",
+						hideAfter:5,
+						showCloseButton: true
+					});
+					return false;
+				}
+				
+				var checked = jQuery("#definition_list input[data-act=checked]:checked");
+				
+				if(checked.length==0){
+					message.post({
+						message: "#springMessage('e.definition.run.id.not.exist')",
+						type: "error",
+						hideAfter:5,
+						showCloseButton: true
+					});
+					return false;
+				}
+				
+				if(!confirm("Are you sure ?")){
+					return false;
+				}
+				
+				checked.each(function(idx, obj){
+					status.doRun({"id":jQuery(this).val(), "gmtBasetime":gmtbasedate}, function(resp){});
+				});
+				
 				return false;
 			});
-			*/
+			
 		}
 	);
 </script>
 
 <script id="tpl_definition_search_form" type="text/html">
-<form class="navbar-form navbar-left" role="search" action="#springUrl('/definition/index.do')" id="search_form">
+<form class="navbar-form navbar-left " role="search" action="#springUrl('/definition/index.do')" id="search_form" onsubmit="return false;">
 	
 	<div class="form-group">
 		<label class="sr-only" for="jobNameMatchBefore">#springMessage('lb.definition.name')</label>
@@ -47,16 +113,18 @@
 	</div>
 	
 	<div  class="form-group">
-	<button type="submit" class="btn btn-primary">
-		<span class="glyphicon glyphicon-search"></span> #springMessage('btn.search')
-	</button>
 	
-	<a href="#springUrl('/definition/edit.do')" class="btn btn-default">
-		<span class="glyphicon glyphicon-plus"></span>
-	</a>
+    	<button type="submit" class="btn btn-primary">
+    		<span class="glyphicon glyphicon-search"></span> #springMessage('btn.search')
+    	</button>
+    	
+    	<a href="#springUrl('/definition/edit.do')" class="btn btn-default">
+    		<span class="glyphicon glyphicon-plus"></span>
+    	</a>
+	
 	</div>
-	
 </form>
+
 </script>
 
 	

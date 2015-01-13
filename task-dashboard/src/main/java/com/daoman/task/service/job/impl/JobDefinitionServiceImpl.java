@@ -15,6 +15,7 @@ import net.caiban.utils.upload.UploadException;
 import net.caiban.utils.upload.UploadResult;
 import net.caiban.utils.upload.filter.JarUploadFilter;
 
+import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
@@ -44,6 +45,8 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	private JobDefinitionMapper jobDefinitionMapper;
 	@Resource
 	private JobStatusService jobStatusService;
+	
+	final static Logger LOG= Logger.getLogger(JobDefinitionServiceImpl.class);
 	
 	@Override
 	public List<JobDefinition> queryAll(Boolean isInUse) {
@@ -78,7 +81,9 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 		}
 		
 		definition.setJobClasspath(jarpath);
-		definition = defaultDefinition(definition);
+		
+		defaultDefinition(definition);
+		
 		jobDefinitionMapper.insert(definition);
 		
 		return definition;
@@ -91,29 +96,29 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 		try {
 			path = zk.getData(AppConst.ZKCONFIG_JAR_UPLOAD_ROOT, false, null);
 		} catch (KeeperException e) {
-			e.printStackTrace();
+			LOG.warn("Error occurred when get jar upload root from zookeeper", e);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			LOG.warn("Error occurred when get jar upload root from zookeeper", e);
 		}
 		
 		try {
 			UploadResult result = MvcUpload.localUpload(request, new String(path), new JarUploadFilter());
 			return result.getFullPath();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.warn("Error occurred when upload jar.", e);
 		} catch (UploadException e) {
-			e.printStackTrace();
+			LOG.warn("Error occurred when upload jar.", e);
 		}
 		
 		return null;
 	}
 	
-	private JobDefinition defaultDefinition(JobDefinition definition){
+	private void defaultDefinition(JobDefinition definition){
 		
 		definition.setIsInUse(JobDefinition.INUSE_FALSE);
 		definition.setJobGroup(JobDefinition.GROUP_TASK);
 		
-		return definition;
+//		return definition;
 	}
 
 	@Override

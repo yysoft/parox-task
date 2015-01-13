@@ -65,9 +65,9 @@ public class DefinitionController extends BaseController {
 	public Pager<JobDefinition> page(HttpServletRequest request,
 			JobDefinitionCond cond, Pager<JobDefinition> page){
 		
-		page = jobDefinitionService.pageDefault(cond, page);
+		Pager<JobDefinition> resultPage = jobDefinitionService.pageDefault(cond, page);
 		
-		return page;
+		return resultPage;
 	}
 	
 	@RequestMapping

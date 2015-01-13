@@ -90,18 +90,36 @@ define(		["jquery","template","utils/table","messenger"],
 		};
 		
 		table["afterBuildTable"]=function(){
-			jQuery("#"+table.config.renderTo+" .act-delete").click(function(){
-				var id= jQuery(this).attr("model-id");
-				
-				definition.remove(id, jQuery(this));
-				
-			});
+//			jQuery("#"+table.config.renderTo+" .act-delete").click(function(){
+//				var id= jQuery(this).attr("model-id");
+//				
+//				definition.remove(id, jQuery(this));
+//				
+//			});
+//			
+//			jQuery("#"+table.config.renderTo+" .act-run").click(function(){
+//				
+//				var id= jQuery(this).attr("model-id");
+//				var runST=jQuery(this).attr("model-isinuse");
+//				definition.run(id, runST, jQuery(this));
+//				
+//			});
+		};
+		
+		definition["bindTableAct"]=function(){
 			
-			jQuery("#"+table.config.renderTo+" .act-run").click(function(){
+			jQuery("#"+table.config.renderTo).on("click", "button[data-act=run]", function(){
 				
 				var id= jQuery(this).attr("model-id");
 				var runST=jQuery(this).attr("model-isinuse");
 				definition.run(id, runST, jQuery(this));
+				
+			});
+			
+			jQuery("#"+table.config.renderTo).on("click", "button[data-act=remove]", function(){
+				
+				var id= jQuery(this).attr("model-id");
+				definition.remove(id, jQuery(this));
 				
 			});
 		};

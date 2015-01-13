@@ -35,6 +35,17 @@ define(		["jquery","template","utils/table","messenger", "Global"],
 			});
 		};
 		
+		def["bindRerun"]=function(root, act){
+			root.on("click", act, function(){
+				var data={};
+				data["jobName"] = jQuery(this).attr("model-job-name");
+				data["gmtBasetime"]=jQuery(this).attr("model-gmt-basetime");
+				
+				def.doRun(data, function(resp){});
+				
+			});
+		};
+		
 		def["doRemove"]=function(data, cb){
 			
 			if(!confirm("Are you sure?")){
@@ -68,6 +79,32 @@ define(		["jquery","template","utils/table","messenger", "Global"],
 			def.doRemove(data, function(){
 				def.table.search(data);
 			});
+		}
+		
+		def["doRun"]=function(data, cb){
+			if(!confirm("Are you sure?")){
+				return false;
+			}
+			
+			jQuery.post(CONTEXT_PATH+"/definition/run.do", data, function(resp){
+				if(resp.result){
+					cb(resp);
+					message.post({
+						message: resp.data,
+						type: "success",
+						hideAfter:2,
+						showCloseButton: true
+					});
+				}else{
+					message.post({
+						message: resp.data,
+						type: "error",
+						hideAfter:5,
+						showCloseButton: true
+					});
+				}
+			}, "json");
+			
 		}
 		
 		return def;

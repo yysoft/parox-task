@@ -25,12 +25,13 @@
 			
 			status.bindRemoveOne(jQuery("#status_list"), "button[data-act=remove]");
 			
+			status.bindRerun(jQuery("#status_list"),"button[data-act=rerun]");
 		}
 	);
 </script>
 
 <script id="tpl_status_list" type="text/html">
-	<table class="table table-hover table-bordered">
+	<table class="table table-hover table-bordered ">
 		<thead>
 		<tr class="active">
 			<th class="text-center" width="10">#</th>
@@ -40,7 +41,7 @@
 			<th class="text-center">#springMessage('tb.status.gmt.trigger')</th>
 			<th class="text-center" >#springMessage('tb.status.error.msg')</th>
 			<th class="text-center" >#springMessage('tb.status.node.key')</th>
-			<th class="text-center" width="40"></th>
+			<th class="text-center" width="70"></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -53,10 +54,15 @@
 			<td >{{status.gmtTriggerStr}}</td>
 			<td >{{status.errorMsg}}</td>
 			<td >{{status.nodeKey}}</td>
-			<td >
-			<button type="button" class="btn btn-danger btn-xs act-delete" data-act="remove" model-id="{{status.id}}">
+			<td class="text-center" >
+			<button type="button" class="btn btn-danger btn-xs" data-act="remove" model-id="{{status.id}}">
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
+			
+			<button type="button" class="btn btn-warning btn-xs" data-act="rerun" model-job-name="{{status.jobName}}" model-gmt-basetime="{{status.gmtBasetimeStr}}">
+				<span class="glyphicon glyphicon-refresh"></span>
+			</button>
+			
 			</td>
 		</tr>
 		{{/each}}

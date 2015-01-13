@@ -3,6 +3,7 @@
  */
 package com.daoman.task.service.job;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,5 +39,7 @@ public interface JobDefinitionService {
 	public void start(Integer id) throws ServiceException;
 	
 	public void stop(Integer id) throws ServiceException;
+	
+	public void run(Integer id, String jobName, Date targetDate) throws ServiceException;
 	
 }

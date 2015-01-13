@@ -4,6 +4,7 @@
 package com.daoman.task.service.job.impl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -26,6 +27,9 @@ import com.daoman.task.domain.job.JobDefinitionCond;
 import com.daoman.task.exception.ServiceException;
 import com.daoman.task.persist.JobDefinitionMapper;
 import com.daoman.task.service.job.JobDefinitionService;
+import com.daoman.task.service.job.JobStatusService;
+import com.daoman.task.thread.TaskControlThread;
+import com.daoman.task.thread.TaskRunThread;
 import com.daoman.task.utils.ZookeeperUtil;
 import com.google.common.base.Strings;
 
@@ -38,6 +42,8 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 	
 	@Resource
 	private JobDefinitionMapper jobDefinitionMapper;
+	@Resource
+	private JobStatusService jobStatusService;
 	
 	@Override
 	public List<JobDefinition> queryAll(Boolean isInUse) {
@@ -220,6 +226,32 @@ public class JobDefinitionServiceImpl implements JobDefinitionService {
 		String path = AppConst.getJobListPath(definition.getJobName());
 		zu.delete(path, -1);
 		
+	}
+
+	@Override
+	public void run(Integer id, String jobName, Date targetDate) throws ServiceException {
+		
+		if(targetDate == null){
+			throw new ServiceException("e.definition.run.target.date.not.exist");
+		}
+		
+		
+		JobDefinition task = null;
+		if(id!=null && id.intValue()>0){
+			task=queryOne(id);
+		}
+		
+		if(!Strings.isNullOrEmpty(jobName)){
+			task=queryOne(jobName);
+		}
+		
+		if(task==null){
+			throw new ServiceException("e.definition.not.exist");
+		}
+		
+		TaskRunThread runThread = new TaskRunThread(task,this, jobStatusService);
+		runThread.setTargetDate(targetDate);
+		TaskControlThread.excute(runThread);
 	}
 	
 }

@@ -154,24 +154,25 @@ public class DefinitionController extends BaseController {
 	
 	@RequestMapping
 	@ResponseBody
-	public Map<String, Object> runTask(HttpServletRequest request, Integer id, 
-			@DateTimeFormat(pattern=AppConst.DATE_FORMAT_DEFAULT) Date start, 
+	public Map<String, Object> run(HttpServletRequest request, Integer id, String jobName,
+			@DateTimeFormat(pattern=AppConst.DATE_FORMAT_DEFAULT) Date gmtBasetime, 
 			Locale locale){
 		//TODO 手动执行任务
+		String error = null;
+		try {
+			jobDefinitionService.run(id, jobName, gmtBasetime);
+			return ajaxResult(true, messageSource.getMessage("e.definition.run.success", null, locale));
+		} catch (ServiceException e) {
+			error = e.getMessage();
+		}
 		
-		return ajaxResult(true, null);
+		return ajaxResult(false, messageSource.getMessage(error, null, locale));
 	}
 	
 	@RequestMapping
 	@ResponseBody
-	public Map<String, Object> runTaskSync(HttpServletRequest request, Integer id, Date start){
+	public Map<String, Object> runSync(HttpServletRequest request, Integer id, Date start){
 		//TODO 手动执行任务（同步）
-		
-		return null;
-	}
-	
-	@RequestMapping
-	public String testupload(HttpServletRequest request){
 		
 		return null;
 	}

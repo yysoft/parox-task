@@ -43,14 +43,14 @@
 		<dependency>
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-utils</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.8</version>
 		</dependency>
 		<dependency>
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-util-mvcupload</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.daoman</groupId>
 			<artifactId>task-common</artifactId>
@@ -287,7 +287,7 @@
 				<artifactId>zookeeper</artifactId>
 				<version>3.4.5</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>redis.clients</groupId>
 				<artifactId>jedis</artifactId>
@@ -299,7 +299,7 @@
 			<artifactId>aliyun-openservices</artifactId>
 			<version>1.0.12</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.aliyun.mqs</groupId>
 			<artifactId>aliyun-mqs</artifactId>

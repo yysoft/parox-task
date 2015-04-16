@@ -9,8 +9,8 @@ import java.net.MalformedURLException;
 import java.util.Date;
 
 import net.caiban.utils.ClassHelper;
-import net.caiban.utils.IpUtil;
-import net.caiban.utils.StacktraceUtil;
+import net.caiban.utils.exception.StacktraceUtil;
+import net.caiban.utils.http.IpUtil;
 
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.KeeperException;

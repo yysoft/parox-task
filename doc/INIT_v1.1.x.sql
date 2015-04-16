@@ -4,7 +4,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
--- Table `parox-task`.`job_status`
+-- Table `job_status`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `job_status` (
   `id` INT(20) NOT NULL AUTO_INCREMENT,
@@ -27,7 +27,7 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
 
 -- -----------------------------------------------------
--- Table `parox-task`.`job_definition`
+-- Table `job_definition`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `job_definition` (
   `id` INT(20) NOT NULL AUTO_INCREMENT,

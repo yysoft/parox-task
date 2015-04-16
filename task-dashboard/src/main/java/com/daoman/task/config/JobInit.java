@@ -12,7 +12,7 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import net.caiban.db.YYConnPool;
-import net.caiban.utils.file.FileUtil;
+import net.caiban.utils.file.PropertiesUtil;
 
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
@@ -49,7 +49,7 @@ public class JobInit {
 	public void init(){
 		Map<String, String> configProp=null;
 		try {
-			configProp = FileUtil.readPropertyFile("config.properties", "utf-8");
+			configProp = PropertiesUtil.classpathRead("config.properties");
 			YYConnPool.getInstance().initConnPools(configProp.get("yyconn.db"));
 		} catch (IOException e) {
 			LOG.error("Error occurred when read properties file. The file is config.properties", e);

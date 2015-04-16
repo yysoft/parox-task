@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.caiban.utils.file.FileUtil;
+import net.caiban.utils.file.PropertiesUtil;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,8 +36,10 @@ public class SysController extends BaseController{
 	public ModelAndView doLogin(HttpServletRequest request, String name,
 			String password, ModelMap model, String returnUrl)
 			throws IOException {
-		//帐号和密码写死在配置文件中
-		Map<String, String> conf = FileUtil.readPropertyFile("file:/opt/config/task.account.properties", "utf-8");
+		
+		Map<String, String> configProp = PropertiesUtil.classpathRead("config.properties");
+		Map<String, String> conf = PropertiesUtil.read(configProp.get("auth.db"),PropertiesUtil.CHARSET_UTF8);
+		
 		if(conf.get(name) != null){
 			if(conf.get(name).equals(password)){
 				

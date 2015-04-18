@@ -32,6 +32,11 @@
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-conn</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.caiban</groupId>
+			<artifactId>yy-utils</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.daoman</groupId>
@@ -52,6 +57,17 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+		</dependency>
+		
+				<!-- dependence of koudaitong.com -->
+ 		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
 		</dependency>
 
 	</dependencies>

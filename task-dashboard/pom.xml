@@ -29,17 +29,17 @@
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-conn</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-utils</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.caiban</groupId>
 			<artifactId>yy-util-mvcupload</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.daoman</groupId>
 			<artifactId>task-common</artifactId>
@@ -149,22 +149,32 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
+		</dependency>
+
+		<!-- dependence of koudaitong.com -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
 		</dependency>
 
 	</dependencies>
 
 	<build>
 		<plugins>
-		
+
 <!-- 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
@@ -184,7 +194,7 @@
 					<!-- <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol> -->
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 </project>

@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import com.daoman.task.CronTask;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.kdt.api.KdtApiClient;
@@ -166,6 +167,7 @@ public class SynchorizeKdtTradesTask implements CronTask {
 	
 	private void saveToDB(JSONObject trade, Integer cid, int pid){
 		if(existed(trade.optString("tid", ""), cid)){
+			updateGmtCreated(trade, cid);
 			return ;
 		}
 		
@@ -173,9 +175,7 @@ public class SynchorizeKdtTradesTask implements CronTask {
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("insert into trade(cid, pid_first, trade_num, source_domain, source_type, gmt_created, gmt_modified, status )");
-		sb.append(" values(?,?,?,'koudaitong.com','API',now(),now(),0)");
-		
-		
+		sb.append(" values(?,?,?,'koudaitong.com','API',?,now(),0)");
 		
 		try {
 			
@@ -184,6 +184,7 @@ public class SynchorizeKdtTradesTask implements CronTask {
 			conn.setInt(1, cid);
 			conn.setInt(2, pid);
 			conn.setString(3, trade.optString("tid", ""));
+			conn.setString(4, trade.optString("created", DateUtil.toString(new Date(), "yyyy-MM-dd HH:mm:ss")));
 			
 			conn.executeUpdate();
 			
@@ -200,6 +201,33 @@ public class SynchorizeKdtTradesTask implements CronTask {
 			
 		} catch (Exception e) {
 			LOG.error("Error execute sql: "+sb.toString());
+		}finally{
+			if(conn!=null){
+				conn.close();
+			}
+		}
+		
+	}
+	
+	private Integer updateGmtCreated(JSONObject trade, Integer cid){
+		
+		String tid = trade.optString("tid", "");
+		if(Strings.isNullOrEmpty(tid)){
+			return 0;
+		}
+		
+		YYConn conn = new YYConn("pcerp");
+		StringBuffer sb = new StringBuffer();
+		sb.append("update trade set");
+		sb.append(" gmt_created='").append(trade.optString("created", DateUtil.toString(new Date(), "yyyy-MM-dd HH:mm:ss"))).append("'");
+		sb.append(" where cid=").append(cid);
+		sb.append(" and source_domain='koudaitong.com'");
+		sb.append(" and trade_num='").append(trade.optString("tid", "")).append("'");
+
+		try {
+			return conn.executeUpdate(sb.toString());
+		} catch (SQLException e) {
+			return 0;
 		}finally{
 			if(conn!=null){
 				conn.close();
